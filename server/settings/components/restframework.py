@@ -49,8 +49,8 @@ SIMPLE_JWT = {
 # https://drf-spectacular.readthedocs.io/en/latest/
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "PROJECT_NAME API",
-    "DESCRIPTION": "API for PROJECT_NAME project",
+    "TITLE": "TopQapı API",
+    "DESCRIPTION": "API for TopQapı project",
     "VERSION": "1.0.0",
     "COMPONENT_SPLIT_REQUEST": True,
     "SERVE_INCLUDE_SCHEMA": True,

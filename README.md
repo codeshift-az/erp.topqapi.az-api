@@ -17,7 +17,7 @@ This is a template for a Django API project. It is intended to be used as a star
 1. Clone the repository
 
     ```bash
-    git clone https://github.com/tarlansoltanov/django-api-template.git
+    git clone https://github.com/tarlansoltanov/api.topqapi.az.git
     ```
 
 2. Install dependencies
