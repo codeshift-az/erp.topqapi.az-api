@@ -19,6 +19,7 @@ urlpatterns = [
 urlpatterns += [
     path(f"{API_PREFIX}", include("server.apps.auth.urls")),
     path(f"{API_PREFIX}", include("server.apps.account.urls")),
+    path(f"{API_PREFIX}", include("server.apps.category.urls")),
 ]
 
 # robots.txt
