@@ -8,6 +8,7 @@ INSTALLED_APPS += [
     "server.apps.auth",
     "server.apps.user",
     "server.apps.account",
+    "server.apps.category",
 ]
 
 # Media files
