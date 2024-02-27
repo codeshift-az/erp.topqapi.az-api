@@ -7,10 +7,10 @@ from server.apps.auth.logic.serializers import AccessTokenSerializer, TokenPairS
 from server.apps.core.logic.responses import FORBIDDEN, UNAUTHORIZED
 
 
-class AdminLoginView(TokenObtainPairView):
+class StaffLoginView(TokenObtainPairView):
     """
     Takes a set of user credentials and returns an access and refresh JSON web
-    token pair to prove the authentication of those credentials for admin.
+    token pair to prove the authentication of those credentials for staff.
     """
 
     @extend_schema(
