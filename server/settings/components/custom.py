@@ -10,6 +10,7 @@ INSTALLED_APPS += [
     "server.apps.account",
     "server.apps.category",
     "server.apps.supplier",
+    "server.apps.branch",
 ]
 
 # Media files
