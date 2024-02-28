@@ -6,7 +6,7 @@ from server.apps.user.models import User
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    ordering = ["-date_joined"]
+    ordering = ("-date_joined",)
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         (

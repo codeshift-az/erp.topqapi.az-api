@@ -9,7 +9,7 @@ class AccountView(generics.RetrieveUpdateDestroyAPIView):
     """View for account management."""
 
     serializer_class = AccountSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self):
         return self.request.user
@@ -22,6 +22,7 @@ class AccountView(generics.RetrieveUpdateDestroyAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve account data of the authenticated user."""
+
         return super().get(request, *args, **kwargs)
 
     @extend_schema(
@@ -32,6 +33,7 @@ class AccountView(generics.RetrieveUpdateDestroyAPIView):
     )
     def put(self, request, *args, **kwargs):
         """Update account data of the authenticated user."""
+
         return super().put(request, *args, **kwargs)
 
     @extend_schema(
@@ -42,4 +44,5 @@ class AccountView(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Delete account data of the authenticated user."""
+
         return super().delete(request, *args, **kwargs)

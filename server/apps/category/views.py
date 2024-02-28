@@ -17,8 +17,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
     filterset_class = CategoryFilter
-    search_fields = ["name"]
-    ordering_fields = ["name", "updated_at", "created_at"]
+    search_fields = ("name",)
+    ordering_fields = (
+        "name",
+        "updated_at",
+        "created_at",
+    )
 
     @extend_schema(
         responses={
