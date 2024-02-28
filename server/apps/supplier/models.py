@@ -9,8 +9,6 @@ class Supplier(CoreModel):
     name = models.CharField(max_length=255, unique=True)
 
     class Meta(CoreModel.Meta):
-        """Meta definition for Supplier."""
-
         verbose_name = "Supplier"
         verbose_name_plural = "Suppliers"
 

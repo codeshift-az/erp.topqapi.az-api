@@ -7,8 +7,6 @@ class AccountSerializer(serializers.ModelSerializer):
     """Serializer for Account model."""
 
     class Meta:
-        """Meta class for AccountSerializer."""
-
         model = User
         fields = (
             "first_name",

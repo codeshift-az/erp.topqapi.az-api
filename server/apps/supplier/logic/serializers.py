@@ -7,8 +7,6 @@ class SupplierSerializer(serializers.ModelSerializer):
     """Serializer definition for Supplier model."""
 
     class Meta:
-        """Meta definition for SupplierSerializer."""
-
         model = Supplier
         fields = (
             "id",

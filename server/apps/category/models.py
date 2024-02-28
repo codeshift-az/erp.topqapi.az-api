@@ -9,8 +9,6 @@ class Category(CoreModel):
     name = models.CharField(max_length=255, unique=True)
 
     class Meta(CoreModel.Meta):
-        """Meta definition for Category."""
-
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
