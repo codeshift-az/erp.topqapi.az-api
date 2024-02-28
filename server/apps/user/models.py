@@ -7,8 +7,8 @@ class UserTypes(models.IntegerChoices):
 
     USER = 0, "İstifadəçi"
     ADMIN = 1, "Müdür"
-    WAREHOUSE = 2, "Anbar işçisi"
-    SALES = 3, "Satıcı"
+    WAREHOUSE = 2, "Anbar"
+    STORE = 3, "Mağaza"
 
 
 class User(AbstractUser):
@@ -23,7 +23,7 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         """Save user permissions and type."""
 
-        if self.type in [UserTypes.WAREHOUSE, UserTypes.SALES]:
+        if self.type in [UserTypes.WAREHOUSE, UserTypes.STORE]:
             self.is_staff = True
             self.is_superuser = False
 
