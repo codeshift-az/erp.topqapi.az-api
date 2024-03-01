@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import generics, permissions, status
 
 from server.apps.account.logic.serializers import AccountSerializer
-from server.apps.core.logic.responses import UNAUTHORIZED
+from server.apps.core.logic import responses
 
 
 class AccountView(generics.RetrieveUpdateDestroyAPIView):
@@ -17,8 +17,8 @@ class AccountView(generics.RetrieveUpdateDestroyAPIView):
     @extend_schema(
         description="Retrieve account data of the authenticated user.",
         responses={
-            status.HTTP_200_OK: AccountSerializer,
-            status.HTTP_401_UNAUTHORIZED: UNAUTHORIZED,
+            status.HTTP_200_OK: serializer_class,
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
         },
     )
     def get(self, request, *args, **kwargs):
@@ -27,8 +27,8 @@ class AccountView(generics.RetrieveUpdateDestroyAPIView):
     @extend_schema(
         description="Update account data of the authenticated user.",
         responses={
-            status.HTTP_200_OK: AccountSerializer,
-            status.HTTP_401_UNAUTHORIZED: UNAUTHORIZED,
+            status.HTTP_200_OK: serializer_class,
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
         },
     )
     def put(self, request, *args, **kwargs):
@@ -38,7 +38,7 @@ class AccountView(generics.RetrieveUpdateDestroyAPIView):
         description="Delete account data of the authenticated user.",
         responses={
             status.HTTP_204_NO_CONTENT: None,
-            status.HTTP_401_UNAUTHORIZED: UNAUTHORIZED,
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
         },
     )
     def delete(self, request, *args, **kwargs):
