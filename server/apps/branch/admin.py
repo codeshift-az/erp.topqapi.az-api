@@ -5,7 +5,7 @@ from server.apps.branch.models import Branch
 
 @admin.register(Branch)
 class BranchAdmin(admin.ModelAdmin):
-    """Admin definition for Branch model."""
+    """Admin class for Branch model."""
 
     list_display = (
         "name",

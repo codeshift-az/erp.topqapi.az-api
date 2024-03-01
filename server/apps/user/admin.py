@@ -6,9 +6,19 @@ from server.apps.user.models import User
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+    """Admin class for User model."""
+
     ordering = ("-date_joined",)
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
+        (
+            None,
+            {
+                "fields": (
+                    "username",
+                    "password",
+                )
+            },
+        ),
         (
             "Personal info",
             {
@@ -16,6 +26,7 @@ class CustomUserAdmin(UserAdmin):
                     "first_name",
                     "last_name",
                     "email",
+                    "type",
                 )
             },
         ),
@@ -24,7 +35,6 @@ class CustomUserAdmin(UserAdmin):
             "Permissions",
             {
                 "fields": (
-                    "type",
                     "is_active",
                     "is_staff",
                     "is_superuser",
@@ -39,7 +49,11 @@ class CustomUserAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("username", "password1", "password2"),
+                "fields": (
+                    "username",
+                    "password1",
+                    "password2",
+                ),
             },
         ),
     )

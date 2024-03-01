@@ -14,5 +14,4 @@ class Supplier(CoreModel):
 
     def __str__(self):
         """Unicode representation of Supplier."""
-
         return self.name

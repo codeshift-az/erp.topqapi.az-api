@@ -15,34 +15,31 @@ class AccountView(generics.RetrieveUpdateDestroyAPIView):
         return self.request.user
 
     @extend_schema(
+        description="Retrieve account data of the authenticated user.",
         responses={
             status.HTTP_200_OK: AccountSerializer,
             status.HTTP_401_UNAUTHORIZED: UNAUTHORIZED,
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieve account data of the authenticated user."""
-
         return super().get(request, *args, **kwargs)
 
     @extend_schema(
+        description="Update account data of the authenticated user.",
         responses={
             status.HTTP_200_OK: AccountSerializer,
             status.HTTP_401_UNAUTHORIZED: UNAUTHORIZED,
         },
     )
     def put(self, request, *args, **kwargs):
-        """Update account data of the authenticated user."""
-
         return super().put(request, *args, **kwargs)
 
     @extend_schema(
+        description="Delete account data of the authenticated user.",
         responses={
             status.HTTP_204_NO_CONTENT: None,
             status.HTTP_401_UNAUTHORIZED: UNAUTHORIZED,
         },
     )
     def delete(self, request, *args, **kwargs):
-        """Delete account data of the authenticated user."""
-
         return super().delete(request, *args, **kwargs)

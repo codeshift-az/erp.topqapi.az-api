@@ -14,5 +14,4 @@ class Branch(CoreModel):
 
     def __str__(self):
         """Unicode representation of Branch."""
-
         return self.name

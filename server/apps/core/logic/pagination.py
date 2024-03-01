@@ -10,7 +10,6 @@ class PageLimitPagination(PageNumberPagination):
 
     def paginate_queryset(self, queryset, request, view=None):
         """Paginate the queryset if the limit query param is not 'all'."""
-
         if request.query_params.get("limit") == "all":
             return None
 

@@ -6,7 +6,6 @@ class IsAdminUserOrReadOnlyForStaff(BasePermission):
 
     def has_permission(self, request, view):
         """Check if user has permission."""
-
         if not request.user.is_authenticated:
             return False
 

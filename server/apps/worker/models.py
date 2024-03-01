@@ -14,5 +14,4 @@ class Driver(CoreModel):
 
     def __str__(self):
         """Unicode representation of Driver."""
-
         return self.name

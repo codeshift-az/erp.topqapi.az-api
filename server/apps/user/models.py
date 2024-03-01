@@ -22,7 +22,6 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         """Save user permissions and type."""
-
         if self.type in [UserTypes.WAREHOUSE, UserTypes.STORE]:
             self.is_staff = True
             self.is_superuser = False

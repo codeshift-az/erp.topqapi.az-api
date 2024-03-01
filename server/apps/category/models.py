@@ -14,5 +14,4 @@ class Category(CoreModel):
 
     def __str__(self):
         """Unicode representation of Category."""
-
         return self.name
