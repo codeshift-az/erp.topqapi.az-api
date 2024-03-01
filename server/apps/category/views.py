@@ -73,6 +73,18 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
     @extend_schema(
+        description=f"Partially update an existing {verbose_name} by {lookup_field}.",
+        responses={
+            status.HTTP_200_OK: serializer_class,
+            status.HTTP_401_UNAUTHORIZED: UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: FORBIDDEN,
+            status.HTTP_404_NOT_FOUND: NOT_FOUND,
+        },
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @extend_schema(
         description=f"Delete an existing {verbose_name} by {lookup_field}.",
         responses={
             status.HTTP_204_NO_CONTENT: None,
