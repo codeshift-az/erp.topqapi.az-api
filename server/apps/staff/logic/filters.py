@@ -17,6 +17,7 @@ class SellerFilter(filters.FilterSet):
     """FilterSet class for Seller model."""
 
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
+    branch = filters.CharFilter(field_name="branch__name", lookup_expr="icontains")
 
     class Meta:
         model = Seller
