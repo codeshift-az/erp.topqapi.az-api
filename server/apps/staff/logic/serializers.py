@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from server.apps.branch.logic.fields import BranchField
 from server.apps.staff.models import Driver, Seller, Worker
 
 
@@ -23,6 +24,8 @@ class DriverSerializer(serializers.ModelSerializer):
 
 class SellerSerializer(serializers.ModelSerializer):
     """Serializer definition for Seller model."""
+
+    branch = BranchField()
 
     class Meta:
         model = Seller

@@ -99,7 +99,7 @@ class DriverViewSet(viewsets.ModelViewSet):
 class SellerViewSet(viewsets.ModelViewSet):
     """Viewset for Seller model."""
 
-    queryset = Seller.objects.all()
+    queryset = Seller.objects.all().select_related("branch")
     serializer_class = SellerSerializer
 
     filterset_class = SellerFilter
