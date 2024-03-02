@@ -19,6 +19,7 @@ urlpatterns = [
 urlpatterns += [
     path(f"{API_PREFIX}", include("server.apps.auth.urls")),
     path(f"{API_PREFIX}", include("server.apps.account.urls")),
+    path(f"{API_PREFIX}", include("server.apps.branch.urls")),
     path(f"{API_PREFIX}", include("server.apps.category.urls")),
     path(f"{API_PREFIX}", include("server.apps.staff.urls")),
     path(f"{API_PREFIX}", include("server.apps.supplier.urls")),
