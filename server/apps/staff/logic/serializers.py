@@ -21,15 +21,6 @@ class DriverSerializer(serializers.ModelSerializer):
             "created_at",
         )
 
-    def __init__(self, *args, **kwargs):
-        """Override the __init__ method."""
-
-        super().__init__(*args, **kwargs)
-
-        if self.instance is not None:
-            for field in self.fields:
-                self.fields[field].required = False
-
 
 class SellerSerializer(serializers.ModelSerializer):
     """Serializer definition for Seller model."""
@@ -52,15 +43,6 @@ class SellerSerializer(serializers.ModelSerializer):
             "created_at",
         )
 
-    def __init__(self, *args, **kwargs):
-        """Override the __init__ method."""
-
-        super().__init__(*args, **kwargs)
-
-        if self.instance is not None:
-            for field in self.fields:
-                self.fields[field].required = False
-
 
 class WorkerSerializer(serializers.ModelSerializer):
     """Serializer definition for Worker model."""
@@ -78,12 +60,3 @@ class WorkerSerializer(serializers.ModelSerializer):
             "updated_at",
             "created_at",
         )
-
-    def __init__(self, *args, **kwargs):
-        """Override the __init__ method."""
-
-        super().__init__(*args, **kwargs)
-
-        if self.instance is not None:
-            for field in self.fields:
-                self.fields[field].required = False
