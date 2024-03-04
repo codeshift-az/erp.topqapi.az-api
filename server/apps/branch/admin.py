@@ -9,6 +9,7 @@ class BranchAdmin(admin.ModelAdmin):
 
     list_display = (
         "name",
+        "user",
         "updated_at",
         "created_at",
     )

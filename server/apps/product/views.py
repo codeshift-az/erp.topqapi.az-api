@@ -13,7 +13,7 @@ from server.apps.product.models import Product
 class ProductViewSet(viewsets.ModelViewSet):
     """Viewset for Product model."""
 
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().select_related("category")
     serializer_class = ProductSerializer
 
     filterset_class = ProductFilter
