@@ -26,10 +26,9 @@ class BranchSerializer(serializers.ModelSerializer):
             "created_at",
         )
 
-    def __init__(self, instance=None, data=..., **kwargs):
+    def __init__(self, *args, **kwargs):
         """Custom initialization method."""
-
-        super().__init__(instance, data, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if self.instance:
             self.fields["password"].required = False
