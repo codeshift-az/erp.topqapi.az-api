@@ -26,7 +26,7 @@ class SupplierViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
 
     @extend_schema(
-        description=f"Retrieve list of all {verbose_name_plural}s.",
+        description=f"Retrieve list of all {verbose_name_plural}.",
         responses={
             status.HTTP_200_OK: serializer_class,
             status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,

@@ -13,6 +13,7 @@ class AccountSerializer(serializers.ModelSerializer):
             "last_name",
             "username",
             "email",
+            "type",
             "is_active",
             "is_staff",
             "is_superuser",
