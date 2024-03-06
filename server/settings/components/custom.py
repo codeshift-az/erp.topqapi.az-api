@@ -14,6 +14,7 @@ INSTALLED_APPS += [
     "server.apps.staff",
     "server.apps.product",
     "server.apps.expense",
+    "server.apps.warehouse",
 ]
 
 # Media files
