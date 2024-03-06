@@ -13,7 +13,7 @@ from server.apps.core.logic import responses
 class BranchViewSet(viewsets.ModelViewSet):
     """Viewset for Branch model."""
 
-    queryset = Branch.objects.all()
+    queryset = Branch.objects.all().select_related("user")
     serializer_class = BranchSerializer
 
     filterset_class = BranchFilter
