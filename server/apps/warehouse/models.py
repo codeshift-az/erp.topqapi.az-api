@@ -34,3 +34,20 @@ class Product(CoreModel):
     def __str__(self):
         """Unicode representation of Product."""
         return f"Product: {self.product.name}"
+
+
+class CartItem(CoreModel):
+    """Model definition for CartItem."""
+
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="warehouse_cart")
+    product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="warehouse_cart")
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    quantity = models.PositiveIntegerField(default=0)
+
+    class Meta(CoreModel.Meta):
+        verbose_name = "Cart Item"
+        verbose_name_plural = "Cart Items"
+
+    def __str__(self):
+        """Unicode representation of CartItem."""
+        return f"{self.product.name}: {self.price} AZN - {self.quantity}x"

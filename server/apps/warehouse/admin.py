@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from server.apps.warehouse.models import Entry, Product
+from server.apps.warehouse.models import CartItem, Entry, Product
 
 
 @admin.register(Product)
@@ -49,3 +49,28 @@ class EntryAdmin(admin.ModelAdmin):
         "created_at",
     )
     search_fields = ("supplier_name",)
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    """Admin class for CartItem model."""
+
+    list_display = (
+        "product",
+        "price",
+        "quantity",
+        "user",
+        "updated_at",
+        "created_at",
+    )
+    list_filter = (
+        "user",
+        "product",
+        "updated_at",
+        "created_at",
+    )
+    search_fields = (
+        "user__username",
+        "user__first_name",
+        "product__name",
+    )
