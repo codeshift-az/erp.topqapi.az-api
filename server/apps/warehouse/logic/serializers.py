@@ -52,6 +52,24 @@ class EntrySerializer(serializers.ModelSerializer):
             "created_at",
         )
 
+    def create(self, validated_data):
+        """Add Cart Items as products for Entry"""
+        entry = Entry.objects.create(**validated_data)
+
+        items = CartItem.objects.filter(user=self.context["request"].user)
+
+        for item in items:
+            product = Product.objects.create(
+                entry=entry,
+                product=item.product,
+                price=item.price,
+                quantity=item.quantity,
+            )
+            item.delete()
+            product.save()
+
+        return entry
+
 
 class CartItemSerializer(serializers.ModelSerializer):
     """Serializer definition for CartItem model."""
