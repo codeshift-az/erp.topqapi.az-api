@@ -6,20 +6,14 @@ from server.apps.core.logic import responses
 
 # Product
 from server.apps.warehouse.logic.filters import EntryFilter, ProductFilter
-from server.apps.warehouse.logic.serializers import CartItemSerializer, EntrySerializer, ProductSerializer
+from server.apps.warehouse.logic.serializers import CartItemSerializer, EntrySerializer, WarehouseProductSerializer
 from server.apps.warehouse.models import CartItem, Entry, Product
 
 
 class EntryViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for Entry model."""
 
-    queryset = (
-        Entry.objects.all()
-        .select_related(
-            "supplier",
-        )
-        .prefetch_related("products", "products__product", "products__product__category")
-    )
+    queryset = Entry.objects.none()
     serializer_class = EntrySerializer
 
     filterset_class = EntryFilter
@@ -34,6 +28,20 @@ class EntryViewSet(viewsets.ReadOnlyModelViewSet):
 
     lookup_field = "id"
 
+    def get_queryset(self):
+        """Get the queryset for this view."""
+        return (
+            Entry.objects.select_related(
+                "supplier",
+            )
+            .prefetch_related(
+                "products",
+                "products__product",
+                "products__product__category",
+            )
+            .all()
+        )
+
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",
         responses={
@@ -58,11 +66,11 @@ class EntryViewSet(viewsets.ReadOnlyModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
 
-class ProductViewSet(viewsets.ReadOnlyModelViewSet):
+class ProductViewSet(viewsets.ModelViewSet):
     """Viewset for Product model."""
 
-    queryset = Product.objects.all().select_related("product", "product__category")
-    serializer_class = ProductSerializer
+    queryset = Product.objects.none()
+    serializer_class = WarehouseProductSerializer
 
     filterset_class = ProductFilter
     search_fields = (
@@ -76,6 +84,13 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
     lookup_field = "id"
 
+    def get_queryset(self):
+        """Get the queryset for this view."""
+        return Product.objects.select_related(
+            "product",
+            "product__category",
+        )
+
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",
         responses={
@@ -98,6 +113,53 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     )
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
+
+    @extend_schema(
+        description=f"Create a new {verbose_name}.",
+        responses={
+            status.HTTP_201_CREATED: serializer_class,
+            status.HTTP_400_BAD_REQUEST: responses.BAD_REQUEST,
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: responses.FORBIDDEN,
+        },
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema(
+        description=f"Update an existing {verbose_name} by {lookup_field}.",
+        responses={
+            status.HTTP_200_OK: serializer_class,
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: responses.FORBIDDEN,
+            status.HTTP_404_NOT_FOUND: responses.NOT_FOUND,
+        },
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @extend_schema(
+        description=f"Partially update an existing {verbose_name} by {lookup_field}.",
+        responses={
+            status.HTTP_200_OK: serializer_class,
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: responses.FORBIDDEN,
+            status.HTTP_404_NOT_FOUND: responses.NOT_FOUND,
+        },
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @extend_schema(
+        description=f"Delete an existing {verbose_name} by {lookup_field}.",
+        responses={
+            status.HTTP_204_NO_CONTENT: None,
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: responses.FORBIDDEN,
+        },
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
 
 
 class CartItemViewSet(viewsets.ModelViewSet):
@@ -114,7 +176,11 @@ class CartItemViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
 
     def get_queryset(self):
-        return CartItem.objects.filter(user=self.request.user)
+        """Get the queryset for this view."""
+        return CartItem.objects.select_related(
+            "product",
+            "product__category",
+        ).filter(user=self.request.user)
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}s.",

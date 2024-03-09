@@ -5,15 +5,17 @@ from server.apps.supplier.logic.fields import SupplierField
 from server.apps.warehouse.models import CartItem, Entry, Product
 
 
-class ProductSerializer(serializers.ModelSerializer):
-    """Serializer definition for Product model."""
+class WarehouseProductSerializer(serializers.ModelSerializer):
+    """Serializer definition for Warehouse Product model."""
 
+    entry = serializers.PrimaryKeyRelatedField(queryset=Entry.objects.all(), write_only=True)
     product = ProductField()
 
     class Meta:
         model = Product
         fields = (
             "id",
+            "entry",
             "product",
             "price",
             "quantity",
@@ -30,7 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class EntrySerializer(serializers.ModelSerializer):
     """Serializer definition for Entry model."""
 
-    products = ProductSerializer(many=True)
+    products = WarehouseProductSerializer(many=True)
     supplier = SupplierField()
 
     class Meta:
