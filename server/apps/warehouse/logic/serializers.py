@@ -32,7 +32,7 @@ class WarehouseProductSerializer(serializers.ModelSerializer):
 class EntrySerializer(serializers.ModelSerializer):
     """Serializer definition for Entry model."""
 
-    products = WarehouseProductSerializer(many=True)
+    products = WarehouseProductSerializer(many=True, read_only=True)
     supplier = SupplierField()
 
     class Meta:
