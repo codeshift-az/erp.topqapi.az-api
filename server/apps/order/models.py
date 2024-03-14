@@ -40,7 +40,7 @@ class Order(CoreModel):
 class OrderItem(CoreModel):
     """Model definition for OrderItem."""
 
-    order = models.ForeignKey("order.Order", on_delete=models.CASCADE, related_name="products")
+    order = models.ForeignKey("order.Order", on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="order_products")
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="order_products")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -53,3 +53,21 @@ class OrderItem(CoreModel):
     def __str__(self):
         """Unicode representation of OrderItem."""
         return f"Order Item: {self.product.name}"
+
+
+class OrderCartItem(CoreModel):
+    """Model definition for OrderCartItem."""
+
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="order_cart")
+    product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="order_cart")
+    supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="order_cart")
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    quantity = models.PositiveIntegerField(default=0)
+
+    class Meta(CoreModel.Meta):
+        verbose_name = "Order Cart Item"
+        verbose_name_plural = "Order Cart Items"
+
+    def __str__(self):
+        """Unicode representation of OrderCartItem."""
+        return f"{self.product.name}: {self.price} AZN - {self.quantity}x"

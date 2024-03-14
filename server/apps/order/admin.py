@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from server.apps.order.models import Order, OrderItem
+from server.apps.order.models import Order, OrderCartItem, OrderItem
 
 
 @admin.register(OrderItem)
@@ -61,3 +61,31 @@ class OrderAdmin(admin.ModelAdmin):
         "created_at",
     )
     search_fields = ("supplier_name",)
+
+
+@admin.register(OrderCartItem)
+class OrderCartItemAdmin(admin.ModelAdmin):
+    """Admin class for OrderCartItem model."""
+
+    list_display = (
+        "product",
+        "supplier",
+        "price",
+        "quantity",
+        "user",
+        "updated_at",
+        "created_at",
+    )
+    list_filter = (
+        "user",
+        "product",
+        "supplier",
+        "updated_at",
+        "created_at",
+    )
+    search_fields = (
+        "user__username",
+        "user__first_name",
+        "product__name",
+        "supplier__name",
+    )
