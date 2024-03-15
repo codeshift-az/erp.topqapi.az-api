@@ -6,8 +6,8 @@ from server.apps.core.models import CoreModel
 class ProductRecord(CoreModel):
     """Model definition for ProductRecord."""
 
-    product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="prices")
-    supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="prices")
+    product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="catalog")
+    supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="catalog")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     class Meta(CoreModel.Meta):

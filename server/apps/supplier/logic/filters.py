@@ -7,7 +7,11 @@ class SupplierFilter(filters.FilterSet):
     """FilterSet class for Supplier model."""
 
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
+    product = filters.NumberFilter(method="filter_by_product")
 
     class Meta:
         model = Supplier
         fields = ("name",)
+
+    def filter_by_product(self, queryset, name, value):
+        return queryset.filter(catalog__product=value)
