@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets
 
 # Core
-from server.apps.core.logic import responses
+from server.apps.core.logic import permissions, responses
 
 # Order
 from server.apps.order.logic.filters import OrderFilter, OrderItemFilter
@@ -18,6 +18,8 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     queryset = Order.objects.none()
     serializer_class = OrderSerializer
+
+    permission_classes = [permissions.IsStaff]
 
     filterset_class = OrderFilter
     search_fields = None
@@ -121,6 +123,8 @@ class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.none()
     serializer_class = OrderItemSerializer
 
+    permission_classes = [permissions.IsStaff]
+
     filterset_class = OrderItemFilter
     search_fields = None
     ordering_fields = "__all__"
@@ -131,6 +135,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
 
     def get_queryset(self):
+        """Get the queryset for this view."""
         queryset = OrderItem.objects.select_related(
             "product",
             "product__category",
@@ -215,6 +220,8 @@ class OrderCartItemViewSet(viewsets.ModelViewSet):
 
     queryset = OrderCartItem.objects.none()
     serializer_class = OrderCartItemSerializer
+
+    permission_classes = [permissions.IsStaff]
 
     pagination_class = None
 
