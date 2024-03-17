@@ -17,6 +17,7 @@ INSTALLED_APPS += [
     "server.apps.catalog",
     "server.apps.warehouse",
     "server.apps.order",
+    "server.apps.factory.product",
     "server.apps.factory.storage",
 ]
 
