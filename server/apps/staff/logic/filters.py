@@ -18,12 +18,14 @@ class SellerFilter(filters.FilterSet):
 
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
     branch = filters.CharFilter(field_name="branch__name", lookup_expr="icontains")
+    branch_id = filters.NumberFilter(field_name="branch")
 
     class Meta:
         model = Seller
         fields = (
             "name",
             "branch",
+            "branch_id",
         )
 
 
