@@ -6,8 +6,9 @@ from server.apps.core.models import CoreModel
 class OrderStatus(models.IntegerChoices):
     """Order status choices."""
 
-    REGISTERED = 1, "Sifariş qeydə alındı"
-    ACCEPTED = 2, "Sifariş qəbul olundu"
+    DRAFT = 0, "Sifariş qeydə alındı"
+    REGISTERED = 1, "Sifariş qəbul olundu"
+    ACCEPTED = 2, "Sifariş  hazırlanır"
 
 
 class Order(CoreModel):
@@ -24,7 +25,7 @@ class Order(CoreModel):
 
     note = models.TextField(blank=True)
 
-    status = models.PositiveSmallIntegerField(choices=OrderStatus.choices, default=OrderStatus.REGISTERED)
+    status = models.PositiveSmallIntegerField(choices=OrderStatus.choices, default=OrderStatus.DRAFT)
 
     date = models.DateField()
 

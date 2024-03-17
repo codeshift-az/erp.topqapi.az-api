@@ -64,6 +64,25 @@ class OrderSerializer(serializers.ModelSerializer):
             "created_at",
         )
 
+    def create(self, validated_data):
+        """Add Cart Items as products for Order"""
+        order = Order.objects.create(**validated_data)
+
+        items = OrderCartItem.objects.filter(user=self.context["request"].user)
+
+        for item in items:
+            product = OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                supplier=item.supplier,
+                price=item.price,
+                quantity=item.quantity,
+            )
+            item.delete()
+            product.save()
+
+        return order
+
 
 class OrderCartItemSerializer(serializers.ModelSerializer):
     """Serializer definition for OrderCartItem model."""
