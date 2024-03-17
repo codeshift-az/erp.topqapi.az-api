@@ -20,12 +20,20 @@ class OrderItemFilter(filters.FilterSet):
 class OrderFilter(filters.FilterSet):
     """FilterSet class for Order model."""
 
+    branch = filters.CharFilter(field_name="branch__name", lookup_expr="icontains")
+    seller = filters.CharFilter(field_name="seller__name", lookup_expr="icontains")
+
+    customer = filters.CharFilter(field_name="customer", lookup_expr="icontains")
+    phone = filters.CharFilter(field_name="phone", lookup_expr="icontains")
+
     date_start = filters.DateFilter(field_name="date", lookup_expr="gte")
     date_end = filters.DateFilter(field_name="date", lookup_expr="lte")
 
     class Meta:
         model = Order
         fields = (
+            "branch",
+            "seller",
             "customer",
             "phone",
             "status",
