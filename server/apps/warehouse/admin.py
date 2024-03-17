@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from server.apps.warehouse.models import CartItem, Entry, Product
+from server.apps.warehouse.models import WarehouseCartItem, WarehouseEntry, WarehouseItem
 
 
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    """Admin class for Product model."""
+@admin.register(WarehouseItem)
+class WarehouseItemAdmin(admin.ModelAdmin):
+    """Admin class for WarehouseItem model."""
 
     list_display = (
         "product",
@@ -22,18 +22,18 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ("product__name",)
 
 
-class ProductInline(admin.TabularInline):
-    """Admin Inline class for Product Model."""
+class WarehouseItemInline(admin.TabularInline):
+    """Admin Inline class for WarehouseItem Model."""
 
-    model = Product
+    model = WarehouseItem
     extra = 1
 
 
-@admin.register(Entry)
-class EntryAdmin(admin.ModelAdmin):
-    """Admin class for Entry model."""
+@admin.register(WarehouseEntry)
+class WarehouseEntryAdmin(admin.ModelAdmin):
+    """Admin class for WarehouseEntry model."""
 
-    inlines = (ProductInline,)
+    inlines = (WarehouseItemInline,)
 
     list_display = (
         "supplier",
@@ -51,9 +51,9 @@ class EntryAdmin(admin.ModelAdmin):
     search_fields = ("supplier_name",)
 
 
-@admin.register(CartItem)
-class CartItemAdmin(admin.ModelAdmin):
-    """Admin class for CartItem model."""
+@admin.register(WarehouseCartItem)
+class WarehouseCartItemAdmin(admin.ModelAdmin):
+    """Admin class for WarehouseCartItem model."""
 
     list_display = (
         "product",

@@ -4,23 +4,23 @@ from rest_framework import status, viewsets
 # Core
 from server.apps.core.logic import responses
 
-# Product
-from server.apps.warehouse.logic.filters import EntryFilter, ProductFilter
-from server.apps.warehouse.logic.serializers import CartItemSerializer, EntrySerializer, WarehouseProductSerializer
-from server.apps.warehouse.models import CartItem, Entry, Product
+# Warehouse
+from server.apps.warehouse.logic.filters import WarehouseEntryFilter, WarehouseItemFilter
+from server.apps.warehouse.logic.serializers import (
+    WarehouseCartItemSerializer,
+    WarehouseEntrySerializer,
+    WarehouseItemSerializer,
+)
+from server.apps.warehouse.models import WarehouseCartItem, WarehouseEntry, WarehouseItem
 
 
-class EntryViewSet(viewsets.ModelViewSet):
-    """Viewset for Entry model."""
+class WarehouseEntryViewSet(viewsets.ModelViewSet):
+    """Viewset for WarehouseEntry model."""
 
-    queryset = Entry.objects.none()
-    serializer_class = EntrySerializer
+    queryset = WarehouseEntry.objects.none()
+    serializer_class = WarehouseEntrySerializer
 
-    filterset_class = EntryFilter
-    search_fields = (
-        "supplier__name",
-        "invoice",
-    )
+    filterset_class = WarehouseEntryFilter
     ordering_fields = "__all__"
 
     verbose_name = "entry to warehouse"
@@ -31,13 +31,13 @@ class EntryViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Get the queryset for this view."""
         return (
-            Entry.objects.select_related(
+            WarehouseEntry.objects.select_related(
                 "supplier",
             )
             .prefetch_related(
-                "products",
-                "products__product",
-                "products__product__category",
+                "items",
+                "items__product",
+                "items__product__category",
             )
             .all()
         )
@@ -113,27 +113,23 @@ class EntryViewSet(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
 
-class ProductViewSet(viewsets.ModelViewSet):
-    """Viewset for Product model."""
+class WarehouseItemViewSet(viewsets.ModelViewSet):
+    """Viewset for WarehouseItem model."""
 
-    queryset = Product.objects.none()
-    serializer_class = WarehouseProductSerializer
+    queryset = WarehouseItem.objects.none()
+    serializer_class = WarehouseItemSerializer
 
-    filterset_class = ProductFilter
-    search_fields = (
-        "product__name",
-        "product__category__name",
-    )
+    filterset_class = WarehouseItemFilter
     ordering_fields = "__all__"
 
-    verbose_name = "product in warehouse"
-    verbose_name_plural = "products in warehouse"
+    verbose_name = "item in warehouse"
+    verbose_name_plural = "items in warehouse"
 
     lookup_field = "id"
 
     def get_queryset(self):
         """Get the queryset for this view."""
-        return Product.objects.select_related(
+        return WarehouseItem.objects.select_related(
             "product",
             "product__category",
         )
@@ -209,22 +205,22 @@ class ProductViewSet(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
 
-class CartItemViewSet(viewsets.ModelViewSet):
-    """Viewset for CartItem model."""
+class WarehouseCartItemViewSet(viewsets.ModelViewSet):
+    """Viewset for WarehouseCartItem model."""
 
-    queryset = CartItem.objects.none()
-    serializer_class = CartItemSerializer
+    queryset = WarehouseCartItem.objects.none()
+    serializer_class = WarehouseCartItemSerializer
 
     pagination_class = None
 
-    verbose_name = "item in cart"
-    verbose_name_plural = "items in cart"
+    verbose_name = "item in warehouse cart"
+    verbose_name_plural = "items in warehouse cart"
 
     lookup_field = "id"
 
     def get_queryset(self):
         """Get the queryset for this view."""
-        return CartItem.objects.select_related(
+        return WarehouseCartItem.objects.select_related(
             "product",
             "product__category",
         ).filter(user=self.request.user)

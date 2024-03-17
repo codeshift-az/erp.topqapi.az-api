@@ -22,13 +22,33 @@ class Order(CoreModel):
     phone = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
 
-    discount = models.PositiveSmallIntegerField(default=0)
-
     note = models.TextField(blank=True)
 
-    status = models.PositiveSmallIntegerField(choices=OrderStatus.choices, default=OrderStatus.DRAFT)
+    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    payed = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    seller_share = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
-    date = models.DateField()
+    sale_date = models.DateField()
+
+    driver = models.ForeignKey(
+        "staff.Driver",
+        on_delete=models.CASCADE,
+        related_name="orders",
+        blank=True,
+        null=True,
+    )
+    delivery_date = models.DateField(blank=True, null=True)
+
+    worker = models.ForeignKey(
+        "staff.Worker",
+        on_delete=models.CASCADE,
+        related_name="orders",
+        blank=True,
+        null=True,
+    )
+    install_date = models.DateField(blank=True, null=True)
+
+    status = models.PositiveSmallIntegerField(choices=OrderStatus.choices, default=OrderStatus.DRAFT)
 
     class Meta(CoreModel.Meta):
         verbose_name = "Order"
@@ -36,7 +56,7 @@ class Order(CoreModel):
 
     def __str__(self):
         """Unicode representation of Order."""
-        return f"Sifariş: #{self.id}"
+        return f"Order: #{self.id}"
 
 
 class OrderItem(CoreModel):
@@ -72,4 +92,4 @@ class OrderCartItem(CoreModel):
 
     def __str__(self):
         """Unicode representation of OrderCartItem."""
-        return f"{self.product.name}: {self.price} AZN - {self.quantity}x"
+        return f"Order Cart Item: {self.product.name}: {self.price} AZN - {self.quantity}x"

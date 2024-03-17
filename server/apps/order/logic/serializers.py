@@ -3,7 +3,7 @@ from rest_framework import serializers
 from server.apps.branch.logic.fields import BranchField
 from server.apps.order.models import Order, OrderCartItem, OrderItem
 from server.apps.product.logic.fields import ProductField
-from server.apps.staff.logic.fields import SellerField
+from server.apps.staff.logic.fields import DriverField, SellerField, WorkerField
 from server.apps.supplier.logic.fields import SupplierField
 
 
@@ -41,6 +41,10 @@ class OrderSerializer(serializers.ModelSerializer):
     branch = BranchField()
     seller = SellerField()
 
+    driver = DriverField()
+
+    worker = WorkerField()
+
     class Meta:
         model = Order
         fields = (
@@ -51,10 +55,16 @@ class OrderSerializer(serializers.ModelSerializer):
             "customer",
             "phone",
             "address",
-            "discount",
             "note",
+            "discount",
+            "payed",
+            "seller_share",
+            "sale_date",
+            "driver",
+            "delivery_date",
+            "worker",
+            "install_date",
             "status",
-            "date",
             "updated_at",
             "created_at",
         )

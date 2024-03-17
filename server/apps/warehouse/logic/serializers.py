@@ -1,18 +1,21 @@
 from rest_framework import serializers
 
+# Fields
 from server.apps.product.logic.fields import ProductField
 from server.apps.supplier.logic.fields import SupplierField
-from server.apps.warehouse.models import CartItem, Entry, Product
+
+# Warehouse
+from server.apps.warehouse.models import WarehouseCartItem, WarehouseEntry, WarehouseItem
 
 
-class WarehouseProductSerializer(serializers.ModelSerializer):
-    """Serializer definition for Warehouse Product model."""
+class WarehouseItemSerializer(serializers.ModelSerializer):
+    """Serializer definition for WarehouseItem model."""
 
-    entry = serializers.PrimaryKeyRelatedField(queryset=Entry.objects.all(), write_only=True)
+    entry = serializers.PrimaryKeyRelatedField(queryset=WarehouseEntry.objects.all(), write_only=True)
     product = ProductField()
 
     class Meta:
-        model = Product
+        model = WarehouseItem
         fields = (
             "id",
             "entry",
@@ -29,17 +32,17 @@ class WarehouseProductSerializer(serializers.ModelSerializer):
         )
 
 
-class EntrySerializer(serializers.ModelSerializer):
-    """Serializer definition for Entry model."""
+class WarehouseEntrySerializer(serializers.ModelSerializer):
+    """Serializer definition for WarehouseEntry model."""
 
-    products = WarehouseProductSerializer(many=True, read_only=True)
+    items = WarehouseItemSerializer(many=True, read_only=True)
     supplier = SupplierField()
 
     class Meta:
-        model = Entry
+        model = WarehouseEntry
         fields = (
             "id",
-            "products",
+            "items",
             "supplier",
             "invoice",
             "date",
@@ -53,13 +56,13 @@ class EntrySerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        """Add Cart Items as products for Entry"""
-        entry = Entry.objects.create(**validated_data)
+        """Add Cart Items as items for WarehouseEntry"""
+        entry = WarehouseEntry.objects.create(**validated_data)
 
-        items = CartItem.objects.filter(user=self.context["request"].user)
+        items = WarehouseCartItem.objects.filter(user=self.context["request"].user)
 
         for item in items:
-            product = Product.objects.create(
+            product = WarehouseItem.objects.create(
                 entry=entry,
                 product=item.product,
                 price=item.price,
@@ -71,13 +74,13 @@ class EntrySerializer(serializers.ModelSerializer):
         return entry
 
 
-class CartItemSerializer(serializers.ModelSerializer):
-    """Serializer definition for CartItem model."""
+class WarehouseCartItemSerializer(serializers.ModelSerializer):
+    """Serializer definition for WarehouseCartItem model."""
 
     product = ProductField()
 
     class Meta:
-        model = CartItem
+        model = WarehouseCartItem
         fields = (
             "id",
             "product",
