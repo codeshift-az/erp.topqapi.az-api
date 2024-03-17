@@ -6,9 +6,10 @@ from server.apps.core.models import CoreModel
 class OrderStatus(models.IntegerChoices):
     """Order status choices."""
 
-    DRAFT = 0, "Sifariş qeydə alındı"
-    REGISTERED = 1, "Sifariş qəbul olundu"
-    ACCEPTED = 2, "Sifariş  hazırlanır"
+    DRAFT = 0, "DRAFT"
+    REGISTERED = 1, "Sifariş qeydə olundu"
+    ACCEPTED = 2, "Sifarişi Anbar qəbul etdi"
+    PENDING = 3, "Sifariş hazırlanır"
 
 
 class Order(CoreModel):
