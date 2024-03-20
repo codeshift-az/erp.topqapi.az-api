@@ -1,5 +1,7 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 # Core
 from server.apps.core.logic import responses
@@ -10,6 +12,7 @@ from server.apps.warehouse.logic.serializers import (
     WarehouseCartItemSerializer,
     WarehouseEntrySerializer,
     WarehouseItemSerializer,
+    WarehouseProductSerializer,
 )
 from server.apps.warehouse.models import WarehouseCartItem, WarehouseEntry, WarehouseItem
 
@@ -130,6 +133,29 @@ class WarehouseItemViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Get the queryset for this view."""
         return WarehouseItem.objects.get_related().get_sales()
+
+    @extend_schema(
+        description="Retrieve list of all products in warehouse with stats.",
+        responses={
+            status.HTTP_200_OK: WarehouseProductSerializer(many=True),
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: responses.FORBIDDEN,
+        },
+    )
+    @action(methods=["GET"], detail=False, url_name="stats")
+    def stats(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(queryset=WarehouseItem.objects.get_related())
+
+        queryset = queryset.get_product_stats()
+
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = WarehouseProductSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = WarehouseProductSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",

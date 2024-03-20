@@ -16,3 +16,16 @@ class WarehouseItemQuerySet(models.QuerySet):
     def get_sales(self):
         """Get Sales of every item."""
         return self.annotate(sale_count=models.Sum("sales__quantity"))
+
+    def get_product_stats(self):
+        """Get Stats of every unique product."""
+        return (
+            self.values("product")
+            .annotate(
+                name=models.F("product__name"),
+                quantity=models.Sum("quantity"),
+                sale_count=models.Sum("sales__quantity", default=0),
+                last_entry=models.Max("entry__date"),
+            )
+            .order_by("-last_entry")
+        )

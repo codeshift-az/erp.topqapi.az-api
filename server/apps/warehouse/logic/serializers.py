@@ -103,3 +103,12 @@ class WarehouseCartItemSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["user"] = self.context["request"].user
         return super().create(validated_data)
+
+
+class WarehouseProductSerializer(serializers.Serializer):
+    """Serializer definition for WarehouseItem Stats."""
+
+    name = serializers.CharField()
+    quantity = serializers.IntegerField()
+    sale_count = serializers.IntegerField()
+    last_entry = serializers.DateField()
