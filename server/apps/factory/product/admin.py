@@ -9,11 +9,16 @@ class FactoryProductAdmin(admin.ModelAdmin):
 
     list_display = (
         "name",
+        "category",
         "updated_at",
         "created_at",
     )
     list_filter = (
+        "category",
         "updated_at",
         "created_at",
     )
-    search_fields = ("name",)
+    search_fields = (
+        "name",
+        "category__name",
+    )
