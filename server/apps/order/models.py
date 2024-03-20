@@ -93,3 +93,19 @@ class OrderCartItem(CoreModel):
     def __str__(self):
         """Unicode representation of OrderCartItem."""
         return f"Order Cart Item: {self.product.name}: {self.price} AZN - {self.quantity}x"
+
+
+class OrderItemSale(CoreModel):
+    """Model definition for OrderItemSale."""
+
+    order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name="sales")
+    warehouse_item = models.ForeignKey("warehouse.WarehouseItem", on_delete=models.CASCADE, related_name="sales")
+    quantity = models.PositiveSmallIntegerField(default=0)
+
+    class Meta(CoreModel.Meta):
+        verbose_name = "Order Item Sale"
+        verbose_name_plural = "Order Item Sales"
+
+    def __str__(self):
+        """Unicode representation of OrderItemSale."""
+        return f"{self.order_item.product.name}"

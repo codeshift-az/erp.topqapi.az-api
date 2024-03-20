@@ -41,9 +41,9 @@ class OrderSerializer(serializers.ModelSerializer):
     branch = BranchField()
     seller = SellerField()
 
-    driver = DriverField()
+    driver = DriverField(required=False)
 
-    worker = WorkerField()
+    worker = WorkerField(required=False)
 
     class Meta:
         model = Order

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from server.apps.order.models import Order, OrderCartItem, OrderItem
+from server.apps.order.models import Order, OrderCartItem, OrderItem, OrderItemSale
 
 
 @admin.register(OrderItem)
@@ -96,4 +96,20 @@ class OrderCartItemAdmin(admin.ModelAdmin):
         "user__first_name",
         "product__name",
         "supplier__name",
+    )
+
+
+@admin.register(OrderItemSale)
+class OrderItemSaleAdmin(admin.ModelAdmin):
+    """Admin class for OrderItemSale model."""
+
+    list_display = (
+        "order_item",
+        "warehouse_item",
+        "updated_at",
+        "created_at",
+    )
+    list_filter = (
+        "updated_at",
+        "created_at",
     )
