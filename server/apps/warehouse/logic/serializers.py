@@ -12,7 +12,10 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
     """Serializer definition for WarehouseItem model."""
 
     entry = serializers.PrimaryKeyRelatedField(queryset=WarehouseEntry.objects.all(), write_only=True)
+
     product = ProductField()
+
+    sale_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = WarehouseItem
@@ -22,11 +25,13 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
             "product",
             "price",
             "quantity",
+            "sale_count",
             "updated_at",
             "created_at",
         )
         read_only_fields = (
             "id",
+            "sale_count",
             "updated_at",
             "created_at",
         )

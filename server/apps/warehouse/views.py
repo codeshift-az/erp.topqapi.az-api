@@ -129,10 +129,7 @@ class WarehouseItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Get the queryset for this view."""
-        return WarehouseItem.objects.select_related(
-            "product",
-            "product__category",
-        )
+        return WarehouseItem.objects.get_related().get_sales()
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",

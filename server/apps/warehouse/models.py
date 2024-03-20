@@ -2,6 +2,9 @@ from django.db import models
 
 from server.apps.core.models import CoreModel
 
+# Model QuerySet
+from server.apps.warehouse.logic.queryset import WarehouseItemQuerySet
+
 
 class WarehouseEntry(CoreModel):
     """Model definition for WarehouseEntry."""
@@ -26,6 +29,8 @@ class WarehouseItem(CoreModel):
     product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="warehouse_items")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(default=0)
+
+    objects = WarehouseItemQuerySet.as_manager()
 
     class Meta(CoreModel.Meta):
         verbose_name = "WarehouseItem"
