@@ -27,6 +27,9 @@ class SellerSerializer(serializers.ModelSerializer):
 
     branch = BranchField()
 
+    total_orders = serializers.IntegerField(read_only=True)
+    total_share = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Seller
         fields = (
@@ -34,6 +37,8 @@ class SellerSerializer(serializers.ModelSerializer):
             "name",
             "branch",
             "salary",
+            "total_orders",
+            "total_share",
             "updated_at",
             "created_at",
         )

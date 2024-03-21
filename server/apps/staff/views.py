@@ -99,20 +99,20 @@ class DriverViewSet(viewsets.ModelViewSet):
 class SellerViewSet(viewsets.ModelViewSet):
     """Viewset for Seller model."""
 
-    queryset = Seller.objects.all().select_related("branch", "branch__user")
+    queryset = Seller.objects.none()
     serializer_class = SellerSerializer
 
     filterset_class = SellerFilter
-    search_fields = (
-        "name",
-        "branch__name",
-    )
     ordering_fields = "__all__"
 
     verbose_name = "seller"
     verbose_name_plural = "sellers"
 
     lookup_field = "id"
+
+    def get_queryset(self):
+        """Get queryset for SellerViewSet"""
+        return Seller.objects.get_related().get_order_stats()
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",
