@@ -13,6 +13,11 @@ class OrderStatus(models.IntegerChoices):
     REGISTERED = 1, "Sifariş qeydə olundu"
     ACCEPTED = 2, "Sifarişi Anbar qəbul etdi"
     PENDING = 3, "Sifariş hazırlanır"
+    READY = 4, "Məhsullar hazırdır"
+    RETURN = 5, "Geri Qayıtma"
+    ON_DELIVERY = 6, "Məhsullar yoldadır"
+    DELIVERED = 7, "Məhsullar çatdırıldı"
+    INSTALLED = 8, "Satış tamamlandı"
 
 
 class Order(CoreModel):
