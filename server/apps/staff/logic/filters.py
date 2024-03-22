@@ -33,7 +33,12 @@ class WorkerFilter(filters.FilterSet):
     """FilterSet class for Worker model."""
 
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
+    date = filters.DateFilter(method="filter_by_date")
 
     class Meta:
         model = Worker
         fields = ("name",)
+
+    def filter_by_date(self, queryset, name, value):
+        """Filter queryset by which does not have any order that day"""
+        return queryset.exclude(orders__install_date=value)

@@ -20,28 +20,42 @@ class OrderItemFilter(filters.FilterSet):
 class OrderFilter(filters.FilterSet):
     """FilterSet class for Order model."""
 
+    id = filters.CharFilter(field_name="id", lookup_expr="icontains")
+
     branch = filters.CharFilter(field_name="branch__name", lookup_expr="icontains")
     seller = filters.CharFilter(field_name="seller__name", lookup_expr="icontains")
+
+    sale_date_start = filters.DateFilter(field_name="sale_date", lookup_expr="gte")
+    sale_date_end = filters.DateFilter(field_name="sale_date", lookup_expr="lte")
 
     customer = filters.CharFilter(field_name="customer", lookup_expr="icontains")
     phone = filters.CharFilter(field_name="phone", lookup_expr="icontains")
 
     driver = filters.CharFilter(field_name="driver__name", lookup_expr="icontains")
+
+    delivery_date_start = filters.DateFilter(field_name="delivery_date", lookup_expr="gte")
+    delivery_date_end = filters.DateFilter(field_name="delivery_date", lookup_expr="lte")
+
     worker = filters.CharFilter(field_name="worker__name", lookup_expr="icontains")
 
-    date_start = filters.DateFilter(field_name="sale_date", lookup_expr="gte")
-    date_end = filters.DateFilter(field_name="Sale_date", lookup_expr="lte")
+    install_date_start = filters.DateFilter(field_name="install_date", lookup_expr="gte")
+    install_date_end = filters.DateFilter(field_name="install_date", lookup_expr="lte")
 
     class Meta:
         model = Order
         fields = (
-            "branch",
-            "seller",
+            "id",
             "customer",
             "phone",
+            "branch",
+            "seller",
+            "sale_date_start",
+            "sale_date_end",
             "driver",
+            "delivery_date_start",
+            "delivery_date_end",
             "worker",
+            "install_date_start",
+            "install_date_end",
             "status",
-            "date_start",
-            "date_end",
         )
