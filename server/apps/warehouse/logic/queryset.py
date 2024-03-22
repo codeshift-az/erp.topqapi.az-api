@@ -10,6 +10,7 @@ class WarehouseItemQuerySet(models.QuerySet):
             "product",
             "product__category",
         ).prefetch_related(
+            "product__catalog",
             "sales",
         )
 

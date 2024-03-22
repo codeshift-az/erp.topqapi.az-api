@@ -17,6 +17,9 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
 
     sale_count = serializers.IntegerField(read_only=True)
 
+    catalog_price = serializers.SerializerMethodField(read_only=True)
+    is_sold = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = WarehouseItem
         fields = (
@@ -26,6 +29,8 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
             "price",
             "quantity",
             "sale_count",
+            "catalog_price",
+            "is_sold",
             "updated_at",
             "created_at",
         )
@@ -35,6 +40,14 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
             "updated_at",
             "created_at",
         )
+
+    def get_catalog_price(self, instance):
+        """Get catalog price of product."""
+        return instance.product.catalog.filter(supplier=instance.entry.supplier).first().price
+
+    def get_is_sold(self, instance):
+        """Check if item is sold."""
+        return instance.sales.exists()
 
 
 class WarehouseEntrySerializer(serializers.ModelSerializer):
