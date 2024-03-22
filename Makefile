@@ -16,6 +16,7 @@ help:
 	@echo " makemigrations       to make Django migrations"
 	@echo " createsuperuser      to create Django superuser"
 	@echo " shell                to run Django shell"
+	@echo " delete-migrations    to delete all migrations"
 	@echo " ------------------- Docker commands ---------------------"
 	@echo " docker-help          to show docker commands help message"
 	@echo " build                to build containers"
@@ -57,7 +58,7 @@ cp-env:
 	cp config/.env.example config/.env
 
 # Django commands
-.PHONY = runserver migrate makemigrations createsuperuser shell
+.PHONY = runserver migrate makemigrations createsuperuser shell delete-migrations
 
 RUN := $(if $(IN_DOCKER),python manage.py,poetry run python manage.py)
 
@@ -81,6 +82,10 @@ shell:
 	@echo "DJANGO: Running Django shell..."
 	$(RUN) shell
 
+delete-migrations:
+	@echo "DJANGO: Deleting all migrations..."
+	find server/apps/ -path "*/migrations/*.py" -not -name "__init__.py" -delete
+
 # Testing commands
 .PHONY = test test-cov test-v
 
@@ -103,7 +108,7 @@ test-app:
 	poetry run pytest -v server/apps/$(app)
 
 # Docker commands
-.PHONY = docker-help build up down restart log
+.PHONY = docker-help build up down restart log docker-shell down-v
 
 dev = -f docker-compose.yml -f docker/docker-compose.dev.yml
 prod = -f docker-compose.yml -f docker/docker-compose.prod.yml

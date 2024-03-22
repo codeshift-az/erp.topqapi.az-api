@@ -3,7 +3,7 @@ from django.db import models
 from server.apps.core.models import CoreModel
 
 # Model Queryset
-from server.apps.staff.logic.queryset import SellerQuerySet
+from server.apps.staff.logic.queryset import SellerQuerySet, WorkerQuerySet
 
 
 class Driver(CoreModel):
@@ -42,6 +42,8 @@ class Worker(CoreModel):
     """Model definition for Worker."""
 
     name = models.CharField(max_length=255, unique=True)
+
+    objects = WorkerQuerySet.as_manager()
 
     class Meta(CoreModel.Meta):
         verbose_name = "Worker"

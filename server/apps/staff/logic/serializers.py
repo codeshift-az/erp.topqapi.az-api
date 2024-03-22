@@ -52,11 +52,14 @@ class SellerSerializer(serializers.ModelSerializer):
 class WorkerSerializer(serializers.ModelSerializer):
     """Serializer definition for Worker model."""
 
+    total_orders = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Worker
         fields = (
             "id",
             "name",
+            "total_orders",
             "updated_at",
             "created_at",
         )

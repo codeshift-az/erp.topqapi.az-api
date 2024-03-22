@@ -19,3 +19,19 @@ class SellerQuerySet(models.QuerySet):
             total_orders=models.Count("orders"),
             total_share=models.Sum("orders__seller_share", default=0),
         )
+
+
+class WorkerQuerySet(models.QuerySet):
+    """QuerySet for Worker model."""
+
+    def get_related(self):
+        """Get queryset with related fields."""
+        return self.prefetch_related(
+            "orders",
+        )
+
+    def get_order_stats(self):
+        """Get queryset with order stats of worker."""
+        return self.annotate(
+            total_orders=models.Count("orders"),
+        )

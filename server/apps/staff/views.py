@@ -111,7 +111,7 @@ class SellerViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
 
     def get_queryset(self):
-        """Get queryset for SellerViewSet"""
+        """Get queryset for SellerViewSet."""
         return Seller.objects.get_related().get_order_stats()
 
     @extend_schema(
@@ -188,17 +188,20 @@ class SellerViewSet(viewsets.ModelViewSet):
 class WorkerViewSet(viewsets.ModelViewSet):
     """Viewset for Worker model."""
 
-    queryset = Worker.objects.all()
+    queryset = Worker.objects.none()
     serializer_class = WorkerSerializer
 
     filterset_class = WorkerFilter
-    search_fields = ("name",)
     ordering_fields = "__all__"
 
     verbose_name = "worker"
     verbose_name_plural = "workers"
 
     lookup_field = "id"
+
+    def get_queryset(self):
+        """Get queryset for WorkerViewSet."""
+        return Worker.objects.get_related().get_order_stats()
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",
