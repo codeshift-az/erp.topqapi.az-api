@@ -3,13 +3,15 @@ from django.db import models
 from server.apps.core.models import CoreModel
 
 # Model Queryset
-from server.apps.staff.logic.queryset import SellerQuerySet, WorkerQuerySet
+from server.apps.staff.logic.queryset import DriverQuerySet, SellerQuerySet, WorkerQuerySet
 
 
 class Driver(CoreModel):
     """Model definition for Driver."""
 
     name = models.CharField(max_length=255, unique=True)
+
+    objects = DriverQuerySet.as_manager()
 
     class Meta(CoreModel.Meta):
         verbose_name = "Driver"

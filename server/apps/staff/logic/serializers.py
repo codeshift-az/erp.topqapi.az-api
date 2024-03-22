@@ -7,11 +7,14 @@ from server.apps.staff.models import Driver, Seller, Worker
 class DriverSerializer(serializers.ModelSerializer):
     """Serializer definition for Driver model."""
 
+    total_orders = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Driver
         fields = (
             "id",
             "name",
+            "total_orders",
             "updated_at",
             "created_at",
         )

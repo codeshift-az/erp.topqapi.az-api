@@ -17,13 +17,16 @@ class DriverViewSet(viewsets.ModelViewSet):
     serializer_class = DriverSerializer
 
     filterset_class = DriverFilter
-    search_fields = ("name",)
     ordering_fields = "__all__"
 
     verbose_name = "driver"
     verbose_name_plural = "drivers"
 
     lookup_field = "id"
+
+    def get_queryset(self):
+        """Get queryset for DriverViewSet."""
+        return Driver.objects.get_related().get_order_stats()
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",

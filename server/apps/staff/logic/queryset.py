@@ -1,6 +1,22 @@
 from django.db import models
 
 
+class DriverQuerySet(models.QuerySet):
+    """QuerySet for Driver model."""
+
+    def get_related(self):
+        """Get queryset with related fields."""
+        return self.prefetch_related(
+            "orders",
+        )
+
+    def get_order_stats(self):
+        """Get queryset with order stats of driver."""
+        return self.annotate(
+            total_orders=models.Count("orders"),
+        )
+
+
 class SellerQuerySet(models.QuerySet):
     """QuerySet for Seller model."""
 
