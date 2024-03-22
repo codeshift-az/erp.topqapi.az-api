@@ -2,6 +2,9 @@ from django.db import models
 
 from server.apps.core.models import CoreModel
 
+# Model Queryset
+from server.apps.order.logic.queryset import OrderItemQuerySet, OrderQuerySet
+
 
 class OrderStatus(models.IntegerChoices):
     """Order status choices."""
@@ -50,6 +53,8 @@ class Order(CoreModel):
 
     status = models.PositiveSmallIntegerField(choices=OrderStatus.choices, default=OrderStatus.DRAFT)
 
+    objects = OrderQuerySet.as_manager()
+
     class Meta(CoreModel.Meta):
         verbose_name = "Order"
         verbose_name_plural = "Orders"
@@ -67,6 +72,8 @@ class OrderItem(CoreModel):
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="order_products")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     quantity = models.PositiveSmallIntegerField(default=0)
+
+    objects = OrderItemQuerySet.as_manager()
 
     class Meta(CoreModel.Meta):
         verbose_name = "Order Item"

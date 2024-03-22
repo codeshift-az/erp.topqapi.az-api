@@ -5,6 +5,7 @@ from server.apps.order.models import Order, OrderCartItem, OrderItem
 from server.apps.product.logic.fields import ProductField
 from server.apps.staff.logic.fields import DriverField, SellerField, WorkerField
 from server.apps.supplier.logic.fields import SupplierField
+from server.apps.warehouse.models import WarehouseItem
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -13,6 +14,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
     order = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all(), write_only=True)
     product = ProductField()
     supplier = SupplierField()
+
+    is_done = serializers.BooleanField(write_only=True)
+    is_return = serializers.BooleanField(write_only=True)
+
+    is_sold = serializers.SerializerMethodField()
 
     class Meta:
         model = OrderItem
@@ -23,6 +29,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
             "supplier",
             "price",
             "quantity",
+            "is_done",
+            "is_return",
+            "is_sold",
             "updated_at",
             "created_at",
         )
@@ -31,6 +40,51 @@ class OrderItemSerializer(serializers.ModelSerializer):
             "updated_at",
             "created_at",
         )
+
+    def get_is_sold(self, obj):
+        """Return if item is sold."""
+        return obj.sales.exists()
+
+    def validate(self, attrs):
+        """Validate if there are enough items in warehouse for sale."""
+
+        is_done = attrs.pop("is_done", False)
+
+        if is_done and self.instance:
+            items = (
+                WarehouseItem.objects.get_related()
+                .get_sales()
+                .filter(
+                    product=self.instance.product,
+                    entry__supplier=self.instance.supplier,
+                    left__gt=0,
+                )
+            )
+
+            if not items:
+                raise serializers.ValidationError("Anbarda bu məhsuldan yetərli qədər yoxdur!")
+
+            count = self.instance.quantity
+            n = 0
+
+            while count > 0:
+                self.instance.sales.create(
+                    order_item=self.instance,
+                    warehouse_item=items[n],
+                    quantity=count if items[n].left >= count else items[n].left,
+                )
+                count -= items[n].left
+                n += 1
+
+        is_return = attrs.pop("is_return", False)
+
+        if is_return and self.instance:
+            items = self.instance.sales.all()
+
+            for item in items:
+                item.delete()
+
+        return super().validate(attrs)
 
 
 class OrderSerializer(serializers.ModelSerializer):

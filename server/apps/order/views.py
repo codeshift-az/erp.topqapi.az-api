@@ -22,7 +22,6 @@ class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsStaff]
 
     filterset_class = OrderFilter
-    search_fields = None
     ordering_fields = "__all__"
 
     verbose_name = "order"
@@ -31,15 +30,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
 
     def get_queryset(self):
-        queryset = Order.objects.prefetch_related(
-            "items",
-            "items__product",
-            "items__product__category",
-            "items__supplier",
-        ).select_related(
-            "branch",
-            "seller",
-        )
+        queryset = Order.objects.get_related()
 
         if self.request.user.type == UserTypes.STORE:
             return queryset.filter(branch=self.request.user.branch)
@@ -126,7 +117,6 @@ class OrderItemViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsStaff]
 
     filterset_class = OrderItemFilter
-    search_fields = None
     ordering_fields = "__all__"
 
     verbose_name = "item in orders"
@@ -135,14 +125,8 @@ class OrderItemViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
 
     def get_queryset(self):
-        """Get the queryset for this view."""
-        queryset = OrderItem.objects.select_related(
-            "product",
-            "product__category",
-            "supplier",
-        )
-
-        return queryset.all()
+        """Get the queryset for OrderItemViewSet."""
+        return OrderItem.objects.get_related()
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",

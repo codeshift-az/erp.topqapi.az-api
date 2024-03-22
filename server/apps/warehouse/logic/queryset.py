@@ -15,7 +15,9 @@ class WarehouseItemQuerySet(models.QuerySet):
 
     def get_sales(self):
         """Get Sales of every item."""
-        return self.annotate(sale_count=models.Sum("sales__quantity"))
+        return self.annotate(
+            sale_count=models.Sum("sales__quantity", default=0), left=models.F("quantity") - models.F("sale_count")
+        )
 
     def get_product_stats(self):
         """Get Stats of every unique product."""
