@@ -61,7 +61,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 )
             )
 
-            if not items:
+            if not items or sum([item.left for item in items]) < self.instance.quantity:
                 raise serializers.ValidationError("Anbarda bu məhsuldan yetərli qədər yoxdur!")
 
             count = self.instance.quantity

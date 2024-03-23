@@ -15,6 +15,8 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
 
     product = ProductField()
 
+    supplier = SupplierField(read_only=True, source="entry.supplier")
+
     sale_count = serializers.IntegerField(read_only=True)
 
     catalog_price = serializers.SerializerMethodField(read_only=True)
@@ -26,6 +28,7 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
             "id",
             "entry",
             "product",
+            "supplier",
             "price",
             "quantity",
             "sale_count",
@@ -43,7 +46,12 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
 
     def get_catalog_price(self, instance):
         """Get catalog price of product."""
-        return instance.product.catalog.filter(supplier=instance.entry.supplier).first().price
+        record = instance.product.catalog.filter(supplier=instance.entry.supplier).first()
+
+        if record:
+            return record.price
+
+        return 0
 
     def get_is_sold(self, instance):
         """Check if item is sold."""
