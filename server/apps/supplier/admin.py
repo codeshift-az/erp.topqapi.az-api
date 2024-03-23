@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from server.apps.supplier.models import Supplier, SupplierPayment
+from server.apps.supplier.models import Supplier
 
 
 @admin.register(Supplier)
@@ -17,21 +17,3 @@ class SupplierAdmin(admin.ModelAdmin):
         "created_at",
     )
     search_fields = ("name",)
-
-
-@admin.register(SupplierPayment)
-class SupplierPaymentAdmin(admin.ModelAdmin):
-    """Admin class for SupplierPayment model."""
-
-    list_display = (
-        "supplier",
-        "amount",
-        "date",
-        "updated_at",
-        "created_at",
-    )
-    list_filter = (
-        "supplier",
-        "updated_at",
-        "created_at",
-    )
