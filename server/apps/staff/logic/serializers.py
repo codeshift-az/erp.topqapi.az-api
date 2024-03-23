@@ -8,6 +8,7 @@ class DriverSerializer(serializers.ModelSerializer):
     """Serializer definition for Driver model."""
 
     total_orders = serializers.IntegerField(read_only=True)
+    last_month = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Driver
@@ -15,6 +16,7 @@ class DriverSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "total_orders",
+            "last_month",
             "updated_at",
             "created_at",
         )
@@ -31,7 +33,10 @@ class SellerSerializer(serializers.ModelSerializer):
     branch = BranchField()
 
     total_orders = serializers.IntegerField(read_only=True)
+    last_month = serializers.IntegerField(read_only=True)
+
     total_share = serializers.IntegerField(read_only=True)
+    last_month_share = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Seller
@@ -41,7 +46,9 @@ class SellerSerializer(serializers.ModelSerializer):
             "branch",
             "salary",
             "total_orders",
+            "last_month",
             "total_share",
+            "last_month_share",
             "updated_at",
             "created_at",
         )
@@ -56,6 +63,7 @@ class WorkerSerializer(serializers.ModelSerializer):
     """Serializer definition for Worker model."""
 
     total_orders = serializers.IntegerField(read_only=True)
+    last_month = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Worker
@@ -63,6 +71,7 @@ class WorkerSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "total_orders",
+            "last_month",
             "updated_at",
             "created_at",
         )
