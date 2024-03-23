@@ -9,12 +9,15 @@ class FactoryStorageItemSerializer(serializers.ModelSerializer):
 
     product = FactoryProductField()
 
+    sale_count = serializers.IntegerField()
+
     class Meta:
         model = FactoryStorageItem
         fields = (
             "id",
             "product",
             "quantity",
+            "sale_count",
             "price",
             "date",
             "updated_at",

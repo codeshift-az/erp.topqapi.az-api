@@ -26,7 +26,7 @@ class FactoryStorageItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Get queryset for FactoryStorageItemViewSet."""
-        return FactoryStorageItem.objects.all()
+        return FactoryStorageItem.objects.get_related().get_sales()
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",

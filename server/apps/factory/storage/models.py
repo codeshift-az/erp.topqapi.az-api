@@ -2,6 +2,9 @@ from django.db import models
 
 from server.apps.core.models import CoreModel
 
+# Model QuerySet
+from server.apps.factory.storage.logic.queryset import StorageItemQuerySet
+
 
 class FactoryStorageItem(CoreModel):
     """Model definition for FactoryStorageItem."""
@@ -10,6 +13,8 @@ class FactoryStorageItem(CoreModel):
     quantity = models.PositiveSmallIntegerField(default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     date = models.DateField()
+
+    objects = StorageItemQuerySet.as_manager()
 
     class Meta(CoreModel.Meta):
         verbose_name = "Factory Storage Item"
