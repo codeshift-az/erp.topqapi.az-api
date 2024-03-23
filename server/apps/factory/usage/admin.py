@@ -10,14 +10,12 @@ class FactoryUsageAdmin(admin.ModelAdmin):
     list_display = (
         "product",
         "quantity",
-        "price",
         "date",
         "updated_at",
         "created_at",
     )
     list_filter = (
         "product",
-        "price",
         "date",
         "updated_at",
         "created_at",

@@ -8,7 +8,6 @@ class FactoryUsage(CoreModel):
 
     product = models.ForeignKey("factory_product.FactoryProduct", on_delete=models.CASCADE, related_name="usages")
     quantity = models.PositiveSmallIntegerField(default=0)
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     date = models.DateField()
 
     class Meta(CoreModel.Meta):
