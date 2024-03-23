@@ -13,17 +13,20 @@ from server.apps.supplier.models import Supplier
 class SupplierViewSet(viewsets.ModelViewSet):
     """Viewset for Supplier model."""
 
-    queryset = Supplier.objects.all()
+    queryset = Supplier.objects.none()
     serializer_class = SupplierSerializer
 
     filterset_class = SupplierFilter
-    search_fields = ("name",)
     ordering_fields = "__all__"
 
     verbose_name = "supplier"
     verbose_name_plural = "suppliers"
 
     lookup_field = "id"
+
+    def get_queryset(self):
+        """Get the queryset for SupplierViewSet."""
+        return Supplier.objects.get_related().get_debt()
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",
