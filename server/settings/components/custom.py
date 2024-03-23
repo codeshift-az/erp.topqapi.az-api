@@ -19,6 +19,7 @@ INSTALLED_APPS += [
     "server.apps.order",
     "server.apps.factory.product",
     "server.apps.factory.storage",
+    "server.apps.factory.sale",
 ]
 
 # Media files
