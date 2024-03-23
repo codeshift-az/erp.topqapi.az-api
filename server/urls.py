@@ -31,6 +31,7 @@ urlpatterns += [
     path(f"{API_PREFIX}", include("server.apps.factory.product.urls")),
     path(f"{API_PREFIX}", include("server.apps.factory.storage.urls")),
     path(f"{API_PREFIX}", include("server.apps.factory.sale.urls")),
+    path(f"{API_PREFIX}", include("server.apps.factory.usage.urls")),
 ]
 
 # robots.txt
