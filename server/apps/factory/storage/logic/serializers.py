@@ -9,7 +9,8 @@ class FactoryStorageItemSerializer(serializers.ModelSerializer):
 
     product = FactoryProductField()
 
-    sale_count = serializers.IntegerField()
+    sale_count = serializers.IntegerField(read_only=True)
+    usage_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = FactoryStorageItem
@@ -18,6 +19,7 @@ class FactoryStorageItemSerializer(serializers.ModelSerializer):
             "product",
             "quantity",
             "sale_count",
+            "usage_count",
             "price",
             "date",
             "updated_at",

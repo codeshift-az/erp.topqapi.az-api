@@ -22,4 +22,4 @@ class FactoryStorageItem(CoreModel):
 
     def __str__(self):
         """Unicode representation of FactoryStorageItem."""
-        return f"Factory Storage Item: {self.name}"
+        return f"Factory Storage Item: {self.product.name} - {self.quantity}"

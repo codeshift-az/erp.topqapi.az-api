@@ -11,10 +11,13 @@ class StorageItemQuerySet(models.QuerySet):
             "product__category",
         ).prefetch_related(
             "sales",
+            "usages",
         )
 
     def get_sales(self):
         """Get Sales of every item."""
         return self.annotate(
-            sale_count=models.Sum("sales__quantity", default=0), left=models.F("quantity") - models.F("sale_count")
+            sale_count=models.Sum("sales__quantity", default=0),
+            usage_count=models.Sum("usages__quantity", default=0),
+            left=models.F("quantity") - models.F("sale_count") - models.F("usage_count"),
         )
