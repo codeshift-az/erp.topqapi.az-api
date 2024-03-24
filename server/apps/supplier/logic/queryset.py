@@ -16,6 +16,6 @@ class SupplierQuerySet(models.QuerySet):
     def get_debt(self):
         """Get payments and debts of the supplier."""
         return self.annotate(
-            total_price=models.Sum("entries__items__price"),
+            total_price=models.Sum(models.F("entries__items__price") * models.F("entries__items__quantity")),
             total_payed=models.F("payments__amount"),
         )

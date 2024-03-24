@@ -7,16 +7,16 @@ from server.apps.staff.models import Driver, Seller, Worker
 class DriverSerializer(serializers.ModelSerializer):
     """Serializer definition for Driver model."""
 
-    total_orders = serializers.IntegerField(read_only=True)
-    last_month = serializers.IntegerField(read_only=True)
+    current_month_orders = serializers.IntegerField(read_only=True)
+    past_month_orders = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Driver
         fields = (
             "id",
             "name",
-            "total_orders",
-            "last_month",
+            "current_month_orders",
+            "past_month_orders",
             "updated_at",
             "created_at",
         )
@@ -32,11 +32,11 @@ class SellerSerializer(serializers.ModelSerializer):
 
     branch = BranchField()
 
-    total_orders = serializers.IntegerField(read_only=True)
-    last_month = serializers.IntegerField(read_only=True)
+    current_month_orders = serializers.IntegerField(read_only=True)
+    past_month_orders = serializers.IntegerField(read_only=True)
 
-    total_share = serializers.IntegerField(read_only=True)
-    last_month_share = serializers.IntegerField(read_only=True)
+    current_month_share = serializers.IntegerField(read_only=True)
+    past_month_share = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Seller
@@ -45,10 +45,10 @@ class SellerSerializer(serializers.ModelSerializer):
             "name",
             "branch",
             "salary",
-            "total_orders",
-            "last_month",
-            "total_share",
-            "last_month_share",
+            "current_month_orders",
+            "past_month_orders",
+            "current_month_share",
+            "past_month_share",
             "updated_at",
             "created_at",
         )
@@ -62,16 +62,16 @@ class SellerSerializer(serializers.ModelSerializer):
 class WorkerSerializer(serializers.ModelSerializer):
     """Serializer definition for Worker model."""
 
-    total_orders = serializers.IntegerField(read_only=True)
-    last_month = serializers.IntegerField(read_only=True)
+    current_month_orders = serializers.IntegerField(read_only=True)
+    past_month_orders = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Worker
         fields = (
             "id",
             "name",
-            "total_orders",
-            "last_month",
+            "current_month_orders",
+            "past_month_orders",
             "updated_at",
             "created_at",
         )
