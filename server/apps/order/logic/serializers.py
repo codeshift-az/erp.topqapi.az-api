@@ -22,7 +22,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     profit = serializers.IntegerField(read_only=True)
 
-    date = serializers.DateField(source="order.sale_date")
+    date = serializers.DateField(source="order.sale_date", read_only=True)
 
     class Meta:
         model = OrderItem
