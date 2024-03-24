@@ -8,12 +8,19 @@ class OrderItemFilter(filters.FilterSet):
 
     product = filters.CharFilter(field_name="product__name", lookup_expr="icontains")
     supplier = filters.CharFilter(field_name="supplier__name", lookup_expr="icontains")
+    category = filters.CharFilter(field_name="product__category__name", lookup_expr="icontains")
+
+    date_start = filters.DateFilter(field_name="date", lookup_expr="gte")
+    date_end = filters.DateFilter(field_name="date", lookup_expr="lte")
 
     class Meta:
         model = OrderItem
         fields = (
             "product",
             "supplier",
+            "category",
+            "date_start",
+            "date_end",
         )
 
 
