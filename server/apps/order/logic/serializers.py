@@ -20,6 +20,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     is_sold = serializers.SerializerMethodField()
 
+    profit = serializers.IntegerField(read_only=True)
+
     date = serializers.DateField(source="order.sale_date")
 
     class Meta:
@@ -34,6 +36,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             "is_done",
             "is_return",
             "is_sold",
+            "profit",
             "date",
             "updated_at",
             "created_at",

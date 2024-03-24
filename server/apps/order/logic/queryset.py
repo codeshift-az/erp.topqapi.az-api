@@ -16,6 +16,16 @@ class OrderItemQuerySet(models.QuerySet):
             "sales__warehouse_item",
         )
 
+    def get_profit(self):
+        """Get Profit of the item."""
+        return self.annotate(
+            profit=models.ExpressionWrapper(
+                models.F("price") * models.F("quantity")
+                - models.Sum(models.F("sales__warehouse_item__price") * models.F("sales__warehouse_item__quantity")),
+                output_field=models.DecimalField(),
+            )
+        )
+
 
 class OrderQuerySet(models.QuerySet):
     """QuerySet definition for Order model."""

@@ -126,7 +126,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Get the queryset for OrderItemViewSet."""
-        return OrderItem.objects.get_related()
+        return OrderItem.objects.get_related().get_profit()
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",
