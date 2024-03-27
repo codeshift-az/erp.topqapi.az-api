@@ -33,6 +33,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             "supplier",
             "price",
             "quantity",
+            "size",
             "is_done",
             "is_return",
             "is_sold",
@@ -147,6 +148,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 supplier=item.supplier,
                 price=item.price,
                 quantity=item.quantity,
+                size=item.size,
             )
             item.delete()
             product.save()
@@ -168,6 +170,7 @@ class OrderCartItemSerializer(serializers.ModelSerializer):
             "supplier",
             "quantity",
             "price",
+            "size",
             "updated_at",
             "created_at",
         )

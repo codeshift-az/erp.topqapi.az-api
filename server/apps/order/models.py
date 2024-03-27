@@ -77,6 +77,7 @@ class OrderItem(CoreModel):
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="order_products")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     quantity = models.PositiveSmallIntegerField(default=0)
+    size = models.CharField(max_length=20, blank=True)
 
     objects = OrderItemQuerySet.as_manager()
 
@@ -97,6 +98,7 @@ class OrderCartItem(CoreModel):
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="order_cart")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     quantity = models.PositiveIntegerField(default=0)
+    size = models.CharField(max_length=20, blank=True)
 
     class Meta(CoreModel.Meta):
         verbose_name = "Order Cart Item"
