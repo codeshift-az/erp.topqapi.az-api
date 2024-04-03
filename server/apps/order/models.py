@@ -34,9 +34,9 @@ class Order(CoreModel):
 
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     payed = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    seller_share = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     sale_date = models.DateField()
+    seller_share = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     driver = models.ForeignKey(
         "staff.Driver",
@@ -45,6 +45,7 @@ class Order(CoreModel):
         blank=True,
         null=True,
     )
+    delivery_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     delivery_date = models.DateField(blank=True, null=True)
 
     worker = models.ForeignKey(
@@ -54,6 +55,7 @@ class Order(CoreModel):
         blank=True,
         null=True,
     )
+    install_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     install_date = models.DateField(blank=True, null=True)
 
     status = models.PositiveSmallIntegerField(choices=OrderStatus.choices, default=OrderStatus.DRAFT)
