@@ -41,4 +41,5 @@ class OrderQuerySet(models.QuerySet):
             "items__product__category",
             "items__supplier",
             "items__sales",
+            "expenses",
         )

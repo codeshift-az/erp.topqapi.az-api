@@ -125,3 +125,19 @@ class OrderItemSale(CoreModel):
     def __str__(self):
         """Unicode representation of OrderItemSale."""
         return f"{self.order_item.product.name}"
+
+
+class OrderExpense(CoreModel):
+    """Model definition for OrderExpense."""
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="expenses")
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+    class Meta(CoreModel.Meta):
+        verbose_name = "Order Expense"
+        verbose_name_plural = "Order Expenses"
+
+    def __str__(self):
+        """Unicode representation of OrderExpense."""
+        return f"Order Expense: {self.name} - {self.price} AZN"

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from server.apps.branch.logic.fields import BranchField
-from server.apps.order.models import Order, OrderCartItem, OrderItem
+from server.apps.order.models import Order, OrderCartItem, OrderExpense, OrderItem
 from server.apps.product.logic.fields import ProductField
 from server.apps.staff.logic.fields import DriverField, SellerField, WorkerField
 from server.apps.supplier.logic.fields import SupplierField
@@ -9,7 +9,7 @@ from server.apps.warehouse.models import WarehouseItem
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    """Serializer definition for  OrderItem model."""
+    """Serializer definition for OrderItem model."""
 
     order = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all(), write_only=True)
     product = ProductField()
@@ -94,10 +94,33 @@ class OrderItemSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
 
+class OrderExpenseSerializer(serializers.ModelSerializer):
+    """Serializer definition for OrderExpense model."""
+
+    order = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all(), write_only=True)
+
+    class Meta:
+        model = OrderExpense
+        fields = (
+            "id",
+            "order",
+            "name",
+            "price",
+            "updated_at",
+            "created_at",
+        )
+        read_only_fields = (
+            "id",
+            "updated_at",
+            "created_at",
+        )
+
+
 class OrderSerializer(serializers.ModelSerializer):
     """Serializer definition for Order model."""
 
     items = OrderItemSerializer(many=True, read_only=True)
+    expenses = OrderExpenseSerializer(many=True, read_only=True)
 
     branch = BranchField()
     seller = SellerField()
@@ -111,6 +134,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "items",
+            "expenses",
             "branch",
             "seller",
             "customer",
