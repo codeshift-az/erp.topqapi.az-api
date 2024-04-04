@@ -30,6 +30,23 @@ class DriverQuerySet(models.QuerySet):
                     orders__delivery_date__lt=datetime.datetime.now().replace(day=1),
                 ),
             ),
+            current_month_share=models.Sum(
+                "orders__delivery_price",
+                filter=models.Q(
+                    orders__delivery_date__gte=datetime.datetime.now().replace(day=1),
+                ),
+                default=0,
+            ),
+            past_month_share=models.Sum(
+                "orders__delivery_price",
+                filter=models.Q(
+                    orders__delivery_date__gte=datetime.datetime.now().replace(
+                        day=1, month=datetime.datetime.now().month - 1
+                    ),
+                    orders__delivery_date__lt=datetime.datetime.now().replace(day=1),
+                ),
+                default=0,
+            ),
         )
 
 
@@ -109,5 +126,22 @@ class WorkerQuerySet(models.QuerySet):
                     ),
                     orders__install_date__lt=datetime.datetime.now().replace(day=1),
                 ),
+            ),
+            current_month_share=models.Sum(
+                "orders__install_price",
+                filter=models.Q(
+                    orders__install_date__gte=datetime.datetime.now().replace(day=1),
+                ),
+                default=0,
+            ),
+            past_month_share=models.Sum(
+                "orders__install_price",
+                filter=models.Q(
+                    orders__install_date__gte=datetime.datetime.now().replace(
+                        day=1, month=datetime.datetime.now().month - 1
+                    ),
+                    orders__install_date__lt=datetime.datetime.now().replace(day=1),
+                ),
+                default=0,
             ),
         )

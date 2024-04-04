@@ -10,6 +10,9 @@ class DriverSerializer(serializers.ModelSerializer):
     current_month_orders = serializers.IntegerField(read_only=True)
     past_month_orders = serializers.IntegerField(read_only=True)
 
+    current_month_share = serializers.IntegerField(read_only=True)
+    past_month_share = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Driver
         fields = (
@@ -17,6 +20,8 @@ class DriverSerializer(serializers.ModelSerializer):
             "name",
             "current_month_orders",
             "past_month_orders",
+            "current_month_share",
+            "past_month_share",
             "updated_at",
             "created_at",
         )
@@ -65,6 +70,9 @@ class WorkerSerializer(serializers.ModelSerializer):
     current_month_orders = serializers.IntegerField(read_only=True)
     past_month_orders = serializers.IntegerField(read_only=True)
 
+    current_month_share = serializers.IntegerField(read_only=True)
+    past_month_share = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Worker
         fields = (
@@ -72,6 +80,8 @@ class WorkerSerializer(serializers.ModelSerializer):
             "name",
             "current_month_orders",
             "past_month_orders",
+            "current_month_share",
+            "past_month_share",
             "updated_at",
             "created_at",
         )
