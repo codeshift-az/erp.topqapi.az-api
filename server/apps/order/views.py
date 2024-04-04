@@ -1,5 +1,7 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 # Core
 from server.apps.core.logic import permissions, responses
@@ -132,6 +134,40 @@ class OrderItemViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Get the queryset for OrderItemViewSet."""
         return OrderItem.objects.get_related().get_profit()
+
+    @extend_schema(
+        description="Retrieve statistics of all orders.",
+        responses={
+            status.HTTP_200_OK: inline_serializer(
+                name="OrderStats",
+                fields={
+                    "total_quantity": {
+                        "type": "number",
+                        "description": "Total number of sold items.",
+                    },
+                    "total_price": {
+                        "type": "number",
+                        "description": "Total price of all orders.",
+                    },
+                    "total_profit": {
+                        "type": "number",
+                        "description": "Total profit of all orders.",
+                    },
+                },
+            ),
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: responses.FORBIDDEN,
+        },
+    )
+    @action(detail=False, methods=["get"])
+    def stats(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        queryset = self.filter_queryset(queryset)
+
+        data = queryset.get_stats()
+
+        return Response(data, status=status.HTTP_200_OK)
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",

@@ -26,6 +26,14 @@ class OrderItemQuerySet(models.QuerySet):
             )
         )
 
+    def get_stats(self):
+        """Get Stats of the item."""
+        return self.get_profit().aggregate(
+            total_quantity=models.Sum(models.F("quantity"), output_field=models.DecimalField()),
+            total_price=models.Sum(models.F("price") * models.F("quantity"), output_field=models.DecimalField()),
+            total_profit=models.Sum(models.F("profit"), output_field=models.DecimalField(), default=0),
+        )
+
 
 class OrderQuerySet(models.QuerySet):
     """QuerySet definition for Order model."""
