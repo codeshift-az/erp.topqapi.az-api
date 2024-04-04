@@ -10,6 +10,8 @@ class OrderItemFilter(filters.FilterSet):
     supplier = filters.CharFilter(field_name="supplier__name", lookup_expr="icontains")
     category = filters.CharFilter(field_name="product__category__name", lookup_expr="icontains")
 
+    is_sold = filters.BooleanFilter(field_name="sales", lookup_expr="isnull", exclude=True)
+
     date_start = filters.DateFilter(field_name="date", lookup_expr="gte")
     date_end = filters.DateFilter(field_name="date", lookup_expr="lte")
 
@@ -19,6 +21,7 @@ class OrderItemFilter(filters.FilterSet):
             "product",
             "supplier",
             "category",
+            "is_sold",
             "date_start",
             "date_end",
         )
