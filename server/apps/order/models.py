@@ -81,6 +81,8 @@ class OrderItem(CoreModel):
     quantity = models.PositiveSmallIntegerField(default=0)
     size = models.CharField(max_length=20, blank=True)
 
+    is_factory_ready = models.BooleanField(default=False)
+
     objects = OrderItemQuerySet.as_manager()
 
     class Meta(CoreModel.Meta):
