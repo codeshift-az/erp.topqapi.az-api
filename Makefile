@@ -2,6 +2,11 @@
 
 .PHONY = help install install-pre-commit lint cp-env
 
+ifneq (,$(wildcard ./config/.env))
+    include config/.env
+    export
+endif
+
 help:
 	@echo "Please use 'make <target>' where <target> is one of"
 	@echo " ------------------- Setup commands ----------------------"
@@ -16,7 +21,6 @@ help:
 	@echo " makemigrations       to make Django migrations"
 	@echo " createsuperuser      to create Django superuser"
 	@echo " shell                to run Django shell"
-	@echo " delete-migrations    to delete all migrations"
 	@echo " ------------------- Docker commands ---------------------"
 	@echo " docker-help          to show docker commands help message"
 	@echo " build                to build containers"
@@ -47,7 +51,7 @@ install:
 
 install-pre-commit:
 	@echo "SETUP: Installing pre-commit hooks..."
-	poetry run pre-commit uninstall; poetry run pre-commit install
+	poetry run pre-commit install
 
 lint:
 	@echo "SETUP: Linting code..."
@@ -58,7 +62,7 @@ cp-env:
 	cp config/.env.example config/.env
 
 # Django commands
-.PHONY = runserver migrate makemigrations createsuperuser shell delete-migrations
+.PHONY = runserver migrate makemigrations createsuperuser shell
 
 RUN := $(if $(IN_DOCKER),python manage.py,poetry run python manage.py)
 
@@ -82,10 +86,6 @@ shell:
 	@echo "DJANGO: Running Django shell..."
 	$(RUN) shell
 
-delete-migrations:
-	@echo "DJANGO: Deleting all migrations..."
-	find server/apps/ -path "*/migrations/*.py" -not -name "__init__.py" -delete
-
 # Testing commands
 .PHONY = test test-cov test-v
 
@@ -108,10 +108,10 @@ test-app:
 	poetry run pytest -v server/apps/$(app)
 
 # Docker commands
-.PHONY = docker-help build up down restart log docker-shell down-v
+.PHONY = docker-help build up down restart log
 
-dev = -f docker-compose.yml -f docker/docker-compose.dev.yml
-prod = -f docker-compose.yml -f docker/docker-compose.prod.yml
+dev = -f docker-compose.yml -f docker/docker-compose.dev.yml --env-file config/.env --project-name ${PROJECT_NAME}
+prod = -f docker-compose.yml -f docker/docker-compose.prod.yml --env-file config/.env --project-name ${PROJECT_NAME}
 
 ENV ?= local
 
