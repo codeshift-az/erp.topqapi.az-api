@@ -5,7 +5,7 @@ from django.db import models
 class UserTypes(models.IntegerChoices):
     """User types."""
 
-    USER = 0, "İstifadəçi"
+    SUPERADMIN = 0, "Super Admin"
     ADMIN = 1, "Müdür"
     WAREHOUSE = 2, "Anbar"
     STORE = 3, "Mağaza"
@@ -14,7 +14,7 @@ class UserTypes(models.IntegerChoices):
 class User(AbstractUser):
     """Custom user model."""
 
-    type = models.PositiveSmallIntegerField(choices=UserTypes.choices, default=UserTypes.USER)
+    type = models.PositiveSmallIntegerField(choices=UserTypes.choices)
 
     class Meta:
         verbose_name = "User"
@@ -31,6 +31,6 @@ class User(AbstractUser):
             self.is_superuser = True
 
         if not self.type and self.is_superuser:
-            self.type = UserTypes.ADMIN
+            self.type = UserTypes.SUPERADMIN
 
         super().save(*args, **kwargs)
