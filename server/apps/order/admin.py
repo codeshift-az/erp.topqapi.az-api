@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from server.apps.order.models import Order, OrderCartItem, OrderItem, OrderItemSale
+from server.apps.order.models import Order, OrderCartItem, OrderExpense, OrderItem, OrderItemSale
 
 
 @admin.register(OrderItem)
@@ -29,6 +29,25 @@ class OrderItemAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(OrderExpense)
+class OrderExpenseAdmin(admin.ModelAdmin):
+    """Admin class for OrderExpense model."""
+
+    list_display = (
+        "order",
+        "name",
+        "price",
+        "updated_at",
+        "created_at",
+    )
+    list_filter = (
+        "order",
+        "updated_at",
+        "created_at",
+    )
+    search_fields = ("name",)
+
+
 class OrderItemInline(admin.TabularInline):
     """Admin Inline class for OrderItem Model."""
 
@@ -36,11 +55,18 @@ class OrderItemInline(admin.TabularInline):
     extra = 1
 
 
+class OrderExpenseInline(admin.TabularInline):
+    """Admin Inline class for OrderItem Model."""
+
+    model = OrderExpense
+    extra = 1
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     """Admin class for Order model."""
 
-    inlines = (OrderItemInline,)
+    inlines = (OrderItemInline, OrderExpenseInline)
 
     list_display = (
         "branch",

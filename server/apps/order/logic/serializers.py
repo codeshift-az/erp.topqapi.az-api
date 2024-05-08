@@ -132,6 +132,9 @@ class OrderSerializer(serializers.ModelSerializer):
 
     worker = WorkerField(required=False)
 
+    total_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+    profit = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+
     class Meta:
         model = Order
         fields = (
@@ -155,6 +158,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "install_price",
             "install_date",
             "status",
+            "total_price",
+            "profit",
             "updated_at",
             "created_at",
         )

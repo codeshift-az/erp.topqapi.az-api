@@ -21,7 +21,7 @@ class OrderItemQuerySet(models.QuerySet):
         return self.annotate(
             profit=models.ExpressionWrapper(
                 models.F("price") * models.F("quantity")
-                - models.Sum(models.F("sales__warehouse_item__price") * models.F("sales__warehouse_item__quantity")),
+                - models.Sum(models.F("sales__warehouse_item__price") * models.F("quantity")),
                 output_field=models.DecimalField(),
             )
         )
@@ -50,4 +50,42 @@ class OrderQuerySet(models.QuerySet):
             "items__supplier",
             "items__sales",
             "expenses",
+        )
+
+    def get_related_sum(self):
+        """Get Sum of the related items."""
+        return self.annotate(
+            total_price=models.Sum(
+                models.F("items__price") * models.F("items__quantity"),
+                output_field=models.DecimalField(),
+                distinct=True,
+                default=0.00,
+            ),
+            total_warehouse_price=models.Sum(
+                models.F("items__sales__warehouse_item__price") * models.F("items__quantity"),
+                output_field=models.DecimalField(),
+                distinct=True,
+                default=0.00,
+            ),
+            total_expense=models.Sum(
+                models.F("expenses__price"),
+                output_field=models.DecimalField(),
+                distinct=True,
+                default=0.00,
+            ),
+        )
+
+    def get_profit(self):
+        """Get Profit of the order."""
+        return self.get_related_sum().annotate(
+            profit=models.ExpressionWrapper(
+                models.F("total_price")
+                - models.F("total_warehouse_price")
+                - models.F("total_expense")
+                - models.F("discount")
+                - models.F("seller_share")
+                - models.F("delivery_price")
+                - models.F("install_price"),
+                output_field=models.DecimalField(),
+            )
         )

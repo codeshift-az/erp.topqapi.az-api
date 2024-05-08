@@ -37,7 +37,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
 
     def get_queryset(self):
-        queryset = Order.objects.get_related()
+        queryset = Order.objects.get_related().get_profit()
 
         if self.request.user.type == UserTypes.STORE:
             return queryset.filter(branch=self.request.user.branch)
