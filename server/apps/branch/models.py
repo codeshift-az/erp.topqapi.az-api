@@ -1,5 +1,6 @@
 from django.db import models
 
+from server.apps.branch.logic.querysets import BranchQuerySet
 from server.apps.core.models import CoreModel
 
 
@@ -8,6 +9,8 @@ class Branch(CoreModel):
 
     name = models.CharField(max_length=255, unique=True)
     user = models.OneToOneField("user.User", on_delete=models.CASCADE, related_name="branch")
+
+    objects = BranchQuerySet.as_manager()
 
     class Meta(CoreModel.Meta):
         verbose_name = "Branch"

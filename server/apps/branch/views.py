@@ -13,7 +13,7 @@ from server.apps.core.logic import responses
 class BranchViewSet(viewsets.ModelViewSet):
     """Viewset for Branch model."""
 
-    queryset = Branch.objects.all().select_related("user")
+    queryset = Branch.objects.none()
     serializer_class = BranchSerializer
 
     filterset_class = BranchFilter
@@ -24,6 +24,10 @@ class BranchViewSet(viewsets.ModelViewSet):
     verbose_name_plural = "branches"
 
     lookup_field = "id"
+
+    def get_queryset(self):
+        """Return the queryset for the view."""
+        return Branch.objects.get_related()
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",

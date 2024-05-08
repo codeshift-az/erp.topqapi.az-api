@@ -54,7 +54,7 @@ class OrderQuerySet(models.QuerySet):
 
     def get_related_sum(self):
         """Get Sum of the related items."""
-        return self.annotate(
+        return self.get_related().annotate(
             total_price=models.Sum(
                 models.F("items__price") * models.F("items__quantity"),
                 output_field=models.DecimalField(),
@@ -88,4 +88,12 @@ class OrderQuerySet(models.QuerySet):
                 - models.F("install_price"),
                 output_field=models.DecimalField(),
             )
+        )
+
+    def get_sum_of_profits(self):
+        """Get Sum of Profits of the orders"""
+        return (
+            self.get_profit()
+            .aggregate(total_profit=models.Sum(models.F("profit"), output_field=models.DecimalField(), default=0))
+            .get("total_profit", 0)
         )
