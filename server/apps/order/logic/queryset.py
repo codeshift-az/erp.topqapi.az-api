@@ -97,3 +97,11 @@ class OrderQuerySet(models.QuerySet):
             .aggregate(total_profit=models.Sum(models.F("profit"), output_field=models.DecimalField(), default=0))
             .get("total_profit", 0)
         )
+
+    def get_stats(self):
+        """Get Stats of the order."""
+        return self.get_profit().aggregate(
+            total_orders=models.Count("id"),
+            total_amount=models.Sum(models.F("total_price"), output_field=models.DecimalField()),
+            total_profit=models.Sum(models.F("profit"), output_field=models.DecimalField(), default=0),
+        )
