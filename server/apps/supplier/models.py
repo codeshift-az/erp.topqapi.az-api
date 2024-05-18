@@ -20,3 +20,30 @@ class Supplier(CoreModel):
     def __str__(self):
         """Unicode representation of Supplier."""
         return self.name
+
+    def get_transactions(self):
+        """Get all transactions of the supplier."""
+        entries = (
+            self.entries.all()
+            .values("id")
+            .annotate(
+                amount=models.ExpressionWrapper(
+                    models.Sum(models.F("items__price") * models.F("items__quantity")),
+                    output_field=models.DecimalField(),
+                ),
+                type=models.Value(False, output_field=models.BooleanField()),
+                date=models.F("date"),
+            )
+            .values("id", "amount", "type", "date")
+        )
+        payments = (
+            self.payments.all()
+            .values("id")
+            .annotate(
+                amount=models.F("amount"),
+                type=models.Value(True, output_field=models.BooleanField()),
+                date=models.F("date"),
+            )
+            .values("id", "amount", "type", "date")
+        )
+        return entries.union(payments).order_by("-date")

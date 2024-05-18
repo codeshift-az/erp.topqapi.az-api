@@ -24,3 +24,26 @@ class SupplierSerializer(serializers.ModelSerializer):
             "updated_at",
             "created_at",
         )
+
+
+class SupplierTransactionSerializer(serializers.Serializer):
+    """Serializer definition for Supplier transactions."""
+
+    id = serializers.IntegerField(read_only=True)
+    amount = serializers.IntegerField(read_only=True)
+    type = serializers.IntegerField(read_only=True)
+    date = serializers.DateField(read_only=True)
+
+    class Meta:
+        fields = (
+            "id",
+            "amount",
+            "type",
+            "date",
+        )
+        read_only_fields = (
+            "id",
+            "amount",
+            "type",
+            "date",
+        )

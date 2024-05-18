@@ -1,12 +1,14 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 # Core
 from server.apps.core.logic import responses
 
 # Supplier
 from server.apps.supplier.logic.filters import SupplierFilter
-from server.apps.supplier.logic.serializers import SupplierSerializer
+from server.apps.supplier.logic.serializers import SupplierSerializer, SupplierTransactionSerializer
 from server.apps.supplier.models import Supplier
 
 
@@ -27,6 +29,31 @@ class SupplierViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Get the queryset for SupplierViewSet."""
         return Supplier.objects.get_related().get_debt()
+
+    @extend_schema(
+        description="Retrieve list of all transactions of the supplier.",
+        responses={
+            status.HTTP_200_OK: SupplierTransactionSerializer,
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: responses.FORBIDDEN,
+        },
+    )
+    @action(detail=True, methods=["get"])
+    def transactions(self, request, *args, **kwargs):
+        supplier = self.get_object()
+
+        if not supplier:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        queryset = supplier.get_transactions()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = SupplierTransactionSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = SupplierTransactionSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(
         description=f"Retrieve list of all {verbose_name_plural}.",
