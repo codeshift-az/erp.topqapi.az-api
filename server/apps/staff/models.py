@@ -26,6 +26,7 @@ class Seller(CoreModel):
     """Model definition for Seller."""
 
     name = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
     branch = models.ForeignKey("branch.Branch", on_delete=models.CASCADE, related_name="sellers")
     salary = models.PositiveIntegerField(default=0)
 

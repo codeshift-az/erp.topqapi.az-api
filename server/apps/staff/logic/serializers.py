@@ -48,6 +48,7 @@ class SellerSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
+            "email",
             "branch",
             "salary",
             "current_month_orders",
