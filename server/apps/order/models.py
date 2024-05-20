@@ -1,9 +1,8 @@
 from django.db import models
 
 from server.apps.core.models import CoreModel
-
-# Model Queryset
 from server.apps.order.logic.queryset import OrderItemQuerySet, OrderQuerySet
+from server.apps.order.logic.utils import send_status_change_email
 
 
 class OrderStatus(models.IntegerChoices):
@@ -69,6 +68,16 @@ class Order(CoreModel):
     def __str__(self):
         """Unicode representation of Order."""
         return f"Order: #{self.id}"
+
+    def save(self, *args, **kwargs):
+        """Send email notification to the seller when order status changes."""
+
+        if self.pk:
+            old_status = Order.objects.get(pk=self.pk).status
+            if old_status != self.status and self.status > OrderStatus.REGISTERED:
+                send_status_change_email(self, self.get_status_display())
+
+        super().save(*args, **kwargs)
 
 
 class OrderItem(CoreModel):
