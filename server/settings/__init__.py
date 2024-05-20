@@ -19,6 +19,7 @@ ENV = config("DJANGO_ENV", default="local") or "local"
 base_settings = (
     "components/common.py",  # Standard Django Settings.
     "components/database.py",  # Database configuration.
+    "components/mailer.py",  # Email configuration.
     "components/logging.py",  # Logging configuration.
     "components/healthcheck.py",  # Health checks.
     "components/cors.py",  # CORS configuration.
