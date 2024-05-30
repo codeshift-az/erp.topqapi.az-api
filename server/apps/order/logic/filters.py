@@ -33,6 +33,7 @@ class OrderFilter(filters.FilterSet):
     id = filters.CharFilter(field_name="id", lookup_expr="icontains")
 
     branch = filters.CharFilter(field_name="branch__name", lookup_expr="icontains")
+    branch_id = filters.NumberFilter(field_name="branch__id", lookup_expr="exact")
     seller = filters.CharFilter(field_name="seller__name", lookup_expr="icontains")
 
     sale_date_start = filters.DateFilter(field_name="sale_date", lookup_expr="gte")
