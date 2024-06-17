@@ -7,12 +7,14 @@ class WarehouseItemFilter(filters.FilterSet):
     """FilterSet class for WarehouseItem model."""
 
     product = filters.CharFilter(field_name="product__name", lookup_expr="icontains")
+    category = filters.CharFilter(field_name="product__category__name", lookup_expr="icontains")
     supplier = filters.CharFilter(field_name="entry__supplier__name", lookup_expr="icontains")
 
     class Meta:
         model = WarehouseItem
         fields = (
             "product",
+            "category",
             "supplier",
         )
 

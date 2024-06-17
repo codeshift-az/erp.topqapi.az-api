@@ -130,6 +130,7 @@ class WarehouseProductSerializer(serializers.Serializer):
     """Serializer definition for WarehouseItem Stats."""
 
     name = serializers.CharField()
+    category = serializers.CharField()
     quantity = serializers.IntegerField()
     sale_count = serializers.IntegerField()
     last_entry = serializers.DateField()
