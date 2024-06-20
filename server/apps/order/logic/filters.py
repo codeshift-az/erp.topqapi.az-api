@@ -12,8 +12,9 @@ class OrderItemFilter(filters.FilterSet):
 
     is_sold = filters.BooleanFilter(field_name="sales", lookup_expr="isnull", exclude=True)
 
-    date_start = filters.DateFilter(field_name="date", lookup_expr="gte")
-    date_end = filters.DateFilter(field_name="date", lookup_expr="lte")
+    date = filters.DateFilter(field_name="order__sale_date", lookup_expr="exact")
+    date_start = filters.DateFilter(field_name="order__sale_date", lookup_expr="gte")
+    date_end = filters.DateFilter(field_name="order__sale_date", lookup_expr="lte")
 
     class Meta:
         model = OrderItem
