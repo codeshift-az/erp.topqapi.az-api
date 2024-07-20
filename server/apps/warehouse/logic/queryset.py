@@ -20,6 +20,15 @@ class WarehouseItemQuerySet(models.QuerySet):
             sale_count=models.Sum("sales__quantity", default=0), left=models.F("quantity") - models.F("sale_count")
         )
 
+    def get_stats(self):
+        """Get stats of all items."""
+
+        return self.get_product_stats().aggregate(
+            total_quantity=models.Sum("quantity"),
+            total_sales=models.Sum("sales__quantity"),
+            total_investment_left=models.Sum((models.F("quantity") - models.F("sale_count")) * models.F("price")),
+        )
+
     def get_product_stats(self):
         """Get Stats of every unique product."""
         return (

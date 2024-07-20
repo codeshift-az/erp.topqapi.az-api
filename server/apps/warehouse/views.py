@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -133,6 +133,30 @@ class WarehouseItemViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Get the queryset for this view."""
         return WarehouseItem.objects.get_related().get_sales()
+
+    @extend_schema(
+        description="Retrieve stats of all items in warehouse.",
+        responses={
+            status.HTTP_200_OK: inline_serializer(
+                name="WarehouseItemStats",
+                fields={
+                    "total_quantity": int,
+                    "total_sales": int,
+                    "total_left": int,
+                    "total_investment_left": float,
+                },
+            ),
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: responses.FORBIDDEN,
+        },
+    )
+    @action(methods=["GET"], detail=False, url_path="stats/all", url_name="stats_all")
+    def stats_all(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(queryset=WarehouseItem.objects.get_related())
+
+        stats = queryset.get_stats()
+
+        return Response(stats, status=status.HTTP_200_OK)
 
     @extend_schema(
         description="Retrieve list of all products in warehouse with stats.",
