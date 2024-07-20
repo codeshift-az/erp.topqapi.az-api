@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -29,6 +29,28 @@ class SupplierViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Get the queryset for SupplierViewSet."""
         return Supplier.objects.get_related().get_debt()
+
+    @extend_schema(
+        description="Retrieve stats of all suppliers.",
+        responses={
+            status.HTTP_200_OK: inline_serializer(
+                name="SupplierStats",
+                fields={
+                    "total_price": "decimal",
+                    "total_payed": "decimal",
+                },
+            ),
+            status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN: responses.FORBIDDEN,
+        },
+    )
+    @action(detail=False, methods=["get"])
+    def stats(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(queryset=Supplier.objects.get_queryset())
+
+        stats = queryset.get_stats()
+
+        return Response(stats, status=status.HTTP_200_OK)
 
     @extend_schema(
         description="Retrieve list of all transactions of the supplier.",

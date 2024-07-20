@@ -17,6 +17,28 @@ class SupplierQuerySet(models.QuerySet):
             "catalog",
         )
 
+    def get_stats(self):
+        """Get stats of all suppliers."""
+
+        total_price = (
+            WarehouseEntry.objects.filter(supplier=models.OuterRef("pk"))
+            .values("supplier")
+            .annotate(amount_sum=models.Sum(models.F("items__price") * models.F("items__quantity")))
+            .values("amount_sum")[:1]
+        )
+
+        total_payed = (
+            Payment.objects.filter(supplier=models.OuterRef("pk"))
+            .values("supplier")
+            .annotate(amount_sum=models.Sum(models.F("amount")))
+            .values("amount_sum")[:1]
+        )
+
+        return self.aggregate(
+            total_price=models.Sum(Coalesce(models.Subquery(total_price), 0, output_field=models.DecimalField())),
+            total_payed=models.Sum(Coalesce(models.Subquery(total_payed), 0, output_field=models.DecimalField())),
+        )
+
     def get_debt(self):
         """Get payments and debts of the supplier."""
 
