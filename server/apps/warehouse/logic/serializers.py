@@ -11,7 +11,7 @@ from server.apps.warehouse.models import WarehouseCartItem, WarehouseEntry, Ware
 class WarehouseItemSerializer(serializers.ModelSerializer):
     """Serializer definition for WarehouseItem model."""
 
-    entry = serializers.PrimaryKeyRelatedField(queryset=WarehouseEntry.objects.all(), write_only=True)
+    entry = serializers.PrimaryKeyRelatedField(queryset=WarehouseEntry.objects.all())
 
     product = ProductField()
 
@@ -21,6 +21,8 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
 
     catalog_price = serializers.SerializerMethodField(read_only=True)
     is_sold = serializers.SerializerMethodField(read_only=True)
+
+    date = serializers.DateField(source="entry.date", read_only=True)
 
     class Meta:
         model = WarehouseItem
@@ -34,6 +36,7 @@ class WarehouseItemSerializer(serializers.ModelSerializer):
             "sale_count",
             "catalog_price",
             "is_sold",
+            "date",
             "updated_at",
             "created_at",
         )

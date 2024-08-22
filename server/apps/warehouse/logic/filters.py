@@ -10,6 +10,10 @@ class WarehouseItemFilter(filters.FilterSet):
     category = filters.CharFilter(field_name="product__category__name", lookup_expr="icontains")
     supplier = filters.CharFilter(field_name="entry__supplier__name", lookup_expr="icontains")
 
+    date = filters.DateFilter(field_name="entry__date", lookup_expr="exact")
+    date_start = filters.DateFilter(field_name="entry__date", lookup_expr="gte")
+    date_end = filters.DateFilter(field_name="entry__date", lookup_expr="lte")
+
     class Meta:
         model = WarehouseItem
         fields = (

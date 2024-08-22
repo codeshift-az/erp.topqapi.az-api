@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "api.topqapi.az"
+name = "api.erp.topqapi.az"
 version = "0.1.0"
 description = ""
 authors = ["Tarlan Soltanov <tarlansoltanov@outlook.com>"]
