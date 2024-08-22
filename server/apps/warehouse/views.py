@@ -143,6 +143,7 @@ class WarehouseItemViewSet(viewsets.ModelViewSet):
                     "total_quantity": int,
                     "total_sales": int,
                     "total_left": int,
+                    "total_investment": float,
                     "total_investment_left": float,
                 },
             ),

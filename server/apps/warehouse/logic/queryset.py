@@ -26,6 +26,7 @@ class WarehouseItemQuerySet(models.QuerySet):
         return self.get_product_stats().aggregate(
             total_quantity=models.Sum("quantity"),
             total_sales=models.Sum("sales__quantity"),
+            total_investment=models.Sum(models.F("quantity") * models.F("price")),
             total_investment_left=models.Sum((models.F("quantity") - models.F("sale_count")) * models.F("price")),
         )
 
