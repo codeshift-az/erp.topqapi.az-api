@@ -7,6 +7,9 @@ class Expense(CoreModel):
     """Model definition for Expense."""
 
     name = models.CharField(max_length=255)
+    branch = models.ForeignKey(
+        "branch.Branch", on_delete=models.CASCADE, related_name="expenses", null=True, blank=True
+    )
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     date = models.DateField()
 

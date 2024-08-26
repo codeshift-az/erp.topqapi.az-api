@@ -9,6 +9,7 @@ class ExpenseAdmin(admin.ModelAdmin):
 
     list_display = (
         "name",
+        "branch",
         "amount",
         "date",
         "updated_at",
