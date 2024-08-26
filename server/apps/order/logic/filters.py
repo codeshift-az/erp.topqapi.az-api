@@ -37,6 +37,7 @@ class OrderFilter(filters.FilterSet):
     branch_id = filters.NumberFilter(field_name="branch__id", lookup_expr="exact")
     seller = filters.CharFilter(field_name="seller__name", lookup_expr="icontains")
 
+    sale_date = filters.DateFilter(field_name="sale_date", lookup_expr="exact")
     sale_date_start = filters.DateFilter(field_name="sale_date", lookup_expr="gte")
     sale_date_end = filters.DateFilter(field_name="sale_date", lookup_expr="lte")
 
@@ -45,11 +46,13 @@ class OrderFilter(filters.FilterSet):
 
     driver = filters.CharFilter(field_name="driver__name", lookup_expr="icontains")
 
+    delivery_date = filters.DateFilter(field_name="delivery_date", lookup_expr="exact")
     delivery_date_start = filters.DateFilter(field_name="delivery_date", lookup_expr="gte")
     delivery_date_end = filters.DateFilter(field_name="delivery_date", lookup_expr="lte")
 
     worker = filters.CharFilter(field_name="worker__name", lookup_expr="icontains")
 
+    install_date = filters.DateFilter(field_name="install_date", lookup_expr="exact")
     install_date_start = filters.DateFilter(field_name="install_date", lookup_expr="gte")
     install_date_end = filters.DateFilter(field_name="install_date", lookup_expr="lte")
 
