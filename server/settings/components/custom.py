@@ -18,10 +18,6 @@ INSTALLED_APPS += [
     "server.apps.warehouse",
     "server.apps.order",
     "server.apps.payment",
-    "server.apps.factory.product",
-    "server.apps.factory.storage",
-    "server.apps.factory.sale",
-    "server.apps.factory.usage",
 ]
 
 # Media files
