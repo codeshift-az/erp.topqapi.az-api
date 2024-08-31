@@ -1,28 +1,30 @@
 from django.db import models
 
-from server.apps.core.models import CoreModel
+from server.apps.core.models import TimeStampedModel
 
 # Model Queryset
 from server.apps.staff.logic.queryset import DriverQuerySet, SellerQuerySet, WorkerQuerySet
 
 
-class Driver(CoreModel):
+class Driver(TimeStampedModel):
     """Model definition for Driver."""
 
     name = models.CharField(max_length=255, unique=True)
 
     objects = DriverQuerySet.as_manager()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Driver"
         verbose_name_plural = "Drivers"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of Driver."""
         return self.name
 
 
-class Seller(CoreModel):
+class Seller(TimeStampedModel):
     """Model definition for Seller."""
 
     name = models.CharField(max_length=255, unique=True)
@@ -32,25 +34,29 @@ class Seller(CoreModel):
 
     objects = SellerQuerySet.as_manager()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Seller"
         verbose_name_plural = "Sellers"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of Seller."""
         return f"{self.name} - {self.branch.name}"
 
 
-class Worker(CoreModel):
+class Worker(TimeStampedModel):
     """Model definition for Worker."""
 
     name = models.CharField(max_length=255, unique=True)
 
     objects = WorkerQuerySet.as_manager()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Worker"
         verbose_name_plural = "Workers"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of Worker."""

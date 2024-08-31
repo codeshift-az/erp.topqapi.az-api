@@ -1,9 +1,9 @@
 from django.db import models
 
-from server.apps.core.models import CoreModel
+from server.apps.core.models import TimeStampedModel
 
 
-class Expense(CoreModel):
+class Expense(TimeStampedModel):
     """Model definition for Expense."""
 
     name = models.CharField(max_length=255)
@@ -13,9 +13,11 @@ class Expense(CoreModel):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     date = models.DateField()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Expense"
         verbose_name_plural = "Expenses"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of Expense."""

@@ -1,28 +1,28 @@
 from django.db import models
 
-from server.apps.core.models import CoreModel
-
-# Model QuerySet
+from server.apps.core.models import TimeStampedModel
 from server.apps.warehouse.logic.queryset import WarehouseItemQuerySet
 
 
-class WarehouseEntry(CoreModel):
+class WarehouseEntry(TimeStampedModel):
     """Model definition for WarehouseEntry."""
 
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="entries")
     invoice = models.CharField(max_length=255, blank=True)
     date = models.DateField()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Warehouse Entry"
         verbose_name_plural = "Warehouse Entries"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of WarehouseEntry."""
         return f"Warehouse Entry: #{self.pk} - {self.date}"
 
 
-class WarehouseItem(CoreModel):
+class WarehouseItem(TimeStampedModel):
     """Model definition for WarehouseItem."""
 
     entry = models.ForeignKey(WarehouseEntry, on_delete=models.CASCADE, related_name="items")
@@ -32,16 +32,18 @@ class WarehouseItem(CoreModel):
 
     objects = WarehouseItemQuerySet.as_manager()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "WarehouseItem"
         verbose_name_plural = "WarehouseItems"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of WarehouseItem."""
         return f"WarehouseItem: {self.product.name}"
 
 
-class WarehouseCartItem(CoreModel):
+class WarehouseCartItem(TimeStampedModel):
     """Model definition for WarehouseCartItem."""
 
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="warehouse_cart")
@@ -49,9 +51,11 @@ class WarehouseCartItem(CoreModel):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     quantity = models.PositiveIntegerField(default=0)
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Cart Item"
         verbose_name_plural = "Cart Items"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of WarehouseCartItem."""

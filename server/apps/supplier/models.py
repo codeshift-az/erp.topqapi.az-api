@@ -1,21 +1,23 @@
 from django.db import models
 
-from server.apps.core.models import CoreModel
+from server.apps.core.models import TimeStampedModel
 
 # Model Queryset
 from server.apps.supplier.logic.queryset import SupplierQuerySet
 
 
-class Supplier(CoreModel):
+class Supplier(TimeStampedModel):
     """Model definition for Supplier."""
 
     name = models.CharField(max_length=255, unique=True)
 
     objects = SupplierQuerySet.as_manager()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Supplier"
         verbose_name_plural = "Suppliers"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of Supplier."""

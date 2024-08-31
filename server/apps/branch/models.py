@@ -1,10 +1,10 @@
 from django.db import models
 
 from server.apps.branch.logic.querysets import BranchQuerySet
-from server.apps.core.models import CoreModel
+from server.apps.core.models import TimeStampedModel
 
 
-class Branch(CoreModel):
+class Branch(TimeStampedModel):
     """Model definition for Branch."""
 
     name = models.CharField(max_length=255, unique=True)
@@ -12,9 +12,11 @@ class Branch(CoreModel):
 
     objects = BranchQuerySet.as_manager()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Branch"
         verbose_name_plural = "Branches"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of Branch."""

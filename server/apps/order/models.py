@@ -1,6 +1,6 @@
 from django.db import models
 
-from server.apps.core.models import CoreModel
+from server.apps.core.models import TimeStampedModel
 from server.apps.order.logic.queryset import OrderItemQuerySet, OrderQuerySet
 from server.apps.order.logic.utils import send_status_change_email
 
@@ -19,7 +19,7 @@ class OrderStatus(models.IntegerChoices):
     INSTALLED = 8, "Satış tamamlandı"
 
 
-class Order(CoreModel):
+class Order(TimeStampedModel):
     """Model definition for Order."""
 
     branch = models.ForeignKey("branch.Branch", on_delete=models.CASCADE, related_name="orders")
@@ -61,9 +61,11 @@ class Order(CoreModel):
 
     objects = OrderQuerySet.as_manager()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Order"
         verbose_name_plural = "Orders"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of Order."""
@@ -80,7 +82,7 @@ class Order(CoreModel):
         super().save(*args, **kwargs)
 
 
-class OrderItem(CoreModel):
+class OrderItem(TimeStampedModel):
     """Model definition for OrderItem."""
 
     order = models.ForeignKey("order.Order", on_delete=models.CASCADE, related_name="items")
@@ -94,16 +96,18 @@ class OrderItem(CoreModel):
 
     objects = OrderItemQuerySet.as_manager()
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Order Item"
         verbose_name_plural = "Order Items"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of OrderItem."""
         return f"Order Item: {self.product.name}"
 
 
-class OrderCartItem(CoreModel):
+class OrderCartItem(TimeStampedModel):
     """Model definition for OrderCartItem."""
 
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="order_cart")
@@ -113,41 +117,47 @@ class OrderCartItem(CoreModel):
     quantity = models.PositiveIntegerField(default=0)
     size = models.CharField(max_length=20, blank=True)
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Order Cart Item"
         verbose_name_plural = "Order Cart Items"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of OrderCartItem."""
         return f"Order Cart Item: {self.product.name}: {self.price} AZN - {self.quantity}x"
 
 
-class OrderItemSale(CoreModel):
+class OrderItemSale(TimeStampedModel):
     """Model definition for OrderItemSale."""
 
     order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name="sales")
     warehouse_item = models.ForeignKey("warehouse.WarehouseItem", on_delete=models.CASCADE, related_name="sales")
     quantity = models.PositiveSmallIntegerField(default=0)
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Order Item Sale"
         verbose_name_plural = "Order Item Sales"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of OrderItemSale."""
         return f"{self.order_item.product.name}"
 
 
-class OrderExpense(CoreModel):
+class OrderExpense(TimeStampedModel):
     """Model definition for OrderExpense."""
 
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="expenses")
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
-    class Meta(CoreModel.Meta):
+    class Meta:
         verbose_name = "Order Expense"
         verbose_name_plural = "Order Expenses"
+
+        ordering = ("-updated_at",)
 
     def __str__(self):
         """Unicode representation of OrderExpense."""
