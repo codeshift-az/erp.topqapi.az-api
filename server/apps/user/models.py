@@ -14,7 +14,7 @@ class UserTypes(models.IntegerChoices):
 class User(AbstractUser):
     """Custom user model."""
 
-    type = models.PositiveSmallIntegerField(choices=UserTypes.choices, default=UserTypes.STORE)
+    type = models.PositiveSmallIntegerField(choices=UserTypes.choices)
 
     class Meta:
         verbose_name = "User"

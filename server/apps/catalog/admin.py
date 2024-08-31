@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from server.apps.catalog.models import ProductRecord
+from server.apps.catalog.models import CatalogItem
 
 
-@admin.register(ProductRecord)
-class ProductRecordAdmin(admin.ModelAdmin):
-    """Admin class for ProductRecord model."""
+@admin.register(CatalogItem)
+class CatalogItemAdmin(admin.ModelAdmin):
+    """Admin class for CatalogItem model."""
 
     list_display = (
         "product",

@@ -1,22 +1,22 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets
 
-# ProductRecord
-from server.apps.catalog.logic.filters import ProductRecordFilter
-from server.apps.catalog.logic.serializers import ProductRecordSerializer
-from server.apps.catalog.models import ProductRecord
+# CatalogItem
+from server.apps.catalog.logic.filters import CatalogItemFilter
+from server.apps.catalog.logic.serializers import CatalogItemSerializer
+from server.apps.catalog.models import CatalogItem
 
 # Core
 from server.apps.core.logic import responses
 
 
-class ProductRecordViewSet(viewsets.ModelViewSet):
-    """Viewset for ProductRecord model."""
+class CatalogItemViewSet(viewsets.ModelViewSet):
+    """Viewset for CatalogItem model."""
 
-    queryset = ProductRecord.objects.all().select_related("product", "supplier")
-    serializer_class = ProductRecordSerializer
+    queryset = CatalogItem.objects.all().select_related("product", "supplier")
+    serializer_class = CatalogItemSerializer
 
-    filterset_class = ProductRecordFilter
+    filterset_class = CatalogItemFilter
     search_fields = (
         "product__name",
         "supplier__name",
