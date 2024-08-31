@@ -1,101 +1,168 @@
 .DEFAULT_GOAL := help
 
-.PHONY = help install install-pre-commit lint cp-env
+ENV ?=
 
 ifneq (,$(wildcard ./config/.env))
     include config/.env
     export
 endif
 
+.PHONE: help
 help:
-	@echo "Please use 'make <target>' where <target> is one of"
-	@echo " ------------------- Setup commands ----------------------"
-	@echo " help                 to show this message"
-	@echo " install              to install dependencies"
-	@echo " install-pre-commit   to install pre-commit hooks"
-	@echo " lint                 to lint code with pre-commit hooks"
-	@echo " cp-env               to copy .env.example to .env"
-	@echo " ------------------- Django commands ---------------------"
-	@echo " runserver            to run Django server"
-	@echo " migrate              to run Django migrations"
-	@echo " makemigrations       to make Django migrations"
-	@echo " createsuperuser      to create Django superuser"
-	@echo " shell                to run Django shell"
-	@echo " ------------------- Docker commands ---------------------"
-	@echo " docker-help          to show docker commands help message"
-	@echo " build                to build containers"
-	@echo " up                   to start containers"
-	@echo " down                 to stop containers"
-	@echo " down-v               to stop containers and remove volumes"
-	@echo " restart              to restart containers"
-	@echo " logs                 to show logs"
-	@echo " docker-shell                to run shell in container"
-	@echo " ------------------- Backup commands ---------------------"
-	@echo " backups              to show database backups"
-	@echo " backup               to backup database"
-	@echo " ------------------- Running commands --------------------"
-	@echo " run-local            to run app locally"
-	@echo " run-local-docker     to run app locally with docker"
-	@echo " run-dev              to run app in development mode"
-	@echo " run-prod             to run app in production mode"
-	@echo " ---------------------------------------------------------"
+	@echo " Please use 'make <target>' where <target> is one of: "
+	@echo " ------------------------- Setup commands ---------------------------- "
+	@echo " help                        to show this message"
+	@echo " install                     to install dependencies"
+	@echo " makeenv                     to create an .env file with interactive prompt"
+	@echo " lint                        to lint code with pre-commit hooks"
+	@echo " ------------------------- Quick commands ---------------------------- "
+	@echo " run-local									  to run Django server locally"
+	@echo " run-dev										  to run Django server in development mode"
+	@echo " run-prod									  to run Django server in production mode"
+	@echo " logs											  to show Docker logs"
+	@echo " shell										    to run shell in Django Docker container"
+	@echo " ------------------------- Django commands --------------------------- "
+	@echo " django-runserver            to run Django server"
+	@echo " django-migrate              to run Django migrations"
+	@echo " django-makemigrations       to make Django migrations"
+	@echo " django-createsuperuser      to create Django superuser"
+	@echo " django-shell                to run Django shell"
+	@echo " django-makemessages         to make Django messages"
+	@echo " django-compilemessages      to compile Django messages"
+	@echo " django-backup							  to backup Django database and media files"
+	@echo " ------------------------- Docker commands --------------------------- "
+	@echo " docker-help 							  to show help for environment and service"
+	@echo " docker-build                to build Docker images"
+	@echo " docker-up						        to start Docker containers"
+	@echo " docker-down                 to stop Docker containers"
+	@echo " docker-down-v               to stop Docker containers and remove volumes"
+	@echo " docker-start                to start Docker containers"
+	@echo " docker-stop                 to stop Docker containers"
+	@echo " docker-restart              to restart Docker containers"
+	@echo " docker-logs                 to show Docker logs"
+	@echo " --------------------------------------------------------------------- "
 
+# ------------------------- Setup commands ---------------------------- #
+
+.PHONY: install
 install:
-	@echo "SETUP: Installing dependencies..."
+	@echo "SETUP: Installing dependencies"
 	poetry install
-
-install-pre-commit:
-	@echo "SETUP: Installing pre-commit hooks..."
+	@echo "SETUP: Installing pre-commit hooks"
 	poetry run pre-commit install
 
+.PHONY: makeenv
+makeenv:
+	poetry run python manage.py makeenv
+
+.PHONY: lint
 lint:
-	@echo "SETUP: Linting code..."
+	@echo "SETUP: Linting code with pre-commit hooks"
 	poetry run pre-commit run --all-files
 
-cp-env:
-	@echo "SETUP: Copying .env.example to .env..."
-	cp config/.env.example config/.env
+# ------------------------- Quick commands ---------------------------- #
 
-# Django commands
-.PHONY = runserver migrate makemigrations createsuperuser shell
+.PHONY: run-local
+run-local: django-runserver
 
-RUN := $(if $(IN_DOCKER),python manage.py,poetry run python manage.py)
+.PHONY: run-dev
+run-dev: ENV=dev
+run-dev: docker-up docker-logs
 
-runserver:
-	@echo "DJANGO: Running Django server..."
-	$(RUN) runserver
+.PHONY: run-prod
+run-prod: ENV=prod
+run-prod: docker-up docker-logs
 
-migrate:
-	@echo "DJANGO: Running Django migrations..."
-	$(RUN) migrate
+.PHONY: logs
+logs: docker-logs
 
-makemigrations:
-	@echo "DJANGO: Making Django migrations..."
-	$(RUN) makemigrations
+.PHONY: shell
+shell: svc=app
+shell: shell=bash
+shell: docker-shell
 
-createsuperuser:
-	@echo "DJANGO: Creating Django superuser..."
-	$(RUN) createsuperuser
+# ------------------------- Django commands --------------------------- #
 
-shell:
-	@echo "DJANGO: Running Django shell..."
-	$(RUN) shell
+python-run = poetry run python
 
-# Docker commands
-.PHONY = docker-help build up down restart log
+app ?=
 
-dev = -f docker-compose.yml -f docker/docker-compose.dev.yml --env-file config/.env --project-name ${PROJECT_NAME}
-prod = -f docker-compose.yml -f docker/docker-compose.prod.yml --env-file config/.env --project-name ${PROJECT_NAME}
+ifneq ($(ENV), local)
+	python-run = $(docker-compose) exec app python
+endif
 
-ENV ?= local
+.PHONY: check-env
+check-env:
+ifeq (,$(wildcard ./config/.env))
+	@echo "ERROR: .env file is missing. Please run makeenv command to create it"
+	@exit 1
+endif
 
-svc :=
+.PHONY: django-runserver
+django-runserver: check-env
+	@echo "DJANGO: Running Django server"
+	$(python-run) manage.py runserver ${DJANGO_PORT}
 
+.PHONY: django-migrate
+django-migrate: check-env
+	@echo "DJANGO: Running Django migrations"
+	$(python-run) manage.py migrate $(app)
+
+.PHONY: django-makemigrations
+django-makemigrations: check-env
+	@echo "DJANGO: Making Django migrations"
+	$(python-run) manage.py makemigrations $(app)
+
+.PHONY: django-createsuperuser
+django-createsuperuser: check-env
+	@echo "DJANGO: Creating Django superuser"
+	$(python-run) manage.py createsuperuser
+
+.PHONY: django-shell
+django-shell: check-env
+	@echo "DJANGO: Running Django shell"
+	$(python-run) manage.py shell
+
+.PHONY: django-makemessages
+django-makemessages: check-env
+	@echo "DJANGO: Making Django messages"
+	$(python-run) manage.py makemessages -l en
+
+.PHONY: django-compilemessages
+django-compilemessages: check-env
+	@echo "DJANGO: Compiling Django messages"
+	$(python-run) manage.py compilemessages --ignore site-packages
+
+.PHONY: django-backup
+django-backup: check-env
+	@echo "DJANGO: Backing up Django database and media files"
+	$(python-run) manage.py backup
+
+# ------------------------- Docker commands --------------------------- #
+
+args = -f docker-compose.yml --env-file config/.env --project-name ${PROJECT_NAME}
+
+dev = -f docker/docker-compose.dev.yml
+prod = -f docker/docker-compose.prod.yml
+
+svc ?=
+shell ?= sh
+
+docker-compose = docker compose $(args) $($(ENV))
+
+.PHONY: check-local
+check-local: check-env
+ifeq ($(ENV), local)
+	@echo "ERROR: You can't run this command in local environment"
+	@exit 1
+endif
+
+.PHONY: docker-help
 docker-help:
 	@echo "--------------------------------  Environment  ---------------------------------"
 	@echo "To run the command for a specific environment run 'make ENV=<env> <target>'"
 	@echo "or set ENV variable to <env> and run 'make <target>', where <env> is:"
-	@echo "local:    the essential services to run the application locally (db, redis, etc)"
+	@echo "local:    the app in local mode without Docker (the docker commands won't work)"
 	@echo "dev:      the app in development mode (essential + django in development mode)"
 	@echo "prod:     the app in production mode (essential + django in production mode)"
 	@echo "----------------------------------  Service  -----------------------------------"
@@ -103,61 +170,49 @@ docker-help:
 	@echo "where <service> is one of the services in docker compose file"
 	@echo "--------------------------------------------------------------------------------"
 
-build:
-	@echo "DOCKER: Building containers..."
-	docker compose $($(ENV)) build $(svc)
+.PHONY: docker-build
+docker-build: check-local
+	@echo "DOCKER: Building Docker images"
+	$(docker-compose) build $(svc)
 
-up:
-	@echo "DOCKER: Starting containers..."
-	docker compose $($(ENV)) up -d $(svc)
+.PHONY: docker-up
+docker-up: check-local
+	@echo "DOCKER: Starting Docker containers"
+	$(docker-compose) up -d $(svc)
 
-down:
-	@echo "DOCKER: Stopping containers..."
-	docker compose $($(ENV)) down $(svc)
+.PHONY: docker-down
+docker-down: check-local
+	@echo "DOCKER: Stopping Docker containers"
+	$(docker-compose) down $(svc)
 
-down-v:
-	@echo "DOCKER: Stopping containers with volumes..."
-	docker compose $($(ENV)) down $(svc) -v
+.PHONY: docker-down-v
+docker-down-v: check-local
+	@echo "DOCKER: Stopping Docker containers"
+	$(docker-compose) down $(svc) -v
 
-restart:
-	@echo "DOCKER: Restarting containers..."
-	docker compose $($(ENV)) restart $(svc)
+.PHONY: docker-start
+docker-start: check-local
+	@echo "DOCKER: Starting Docker containers"
+	$(docker-compose) start $(svc)
 
-log:
-	@echo "DOCKER: Showing logs..."
-	docker compose $($(ENV)) logs -f $(svc)
+.PHONY: docker-stop
+docker-stop: check-local
+	@echo "DOCKER: Stopping Docker containers"
+	$(docker-compose) stop $(svc)
 
-docker-shell:
-	@echo "DOCKER: Running shell..."
-	docker compose $($(ENV)) exec $(svc) sh
+.PHONY: docker-restart
+docker-restart: check-local
+	@echo "DOCKER: Restarting Docker containers"
+	$(docker-compose) restart $(svc)
 
-# Backup commands
-.PHONY = check-prod backups backup
+.PHONY: docker-logs
+docker-logs: check-local
+	@echo "DOCKER: Showing Docker logs"
+	$(docker-compose) logs -f $(svc)
 
-check-prod:
-ifneq ($(ENV), prod)
-	@echo "ERROR: You can't run this command in environment other than 'prod'"
-	@exit 1
-endif
+.PHONY: docker-shell
+docker-shell: check-local
+	@echo "DOCKER: Running shell in Docker container"
+	$(docker-compose) exec $(svc) $(shell)
 
-backups: check-prod;
-	@echo "BACKUP: Showing database backups..."
-	docker compose $(prod) exec backup backups
-
-backup: check-prod;
-	@echo "BACKUP: Creating database backup..."
-	docker compose $(prod) exec backup backup
-
-# Run commands
-.PHONY = run-local run-local-docker run-dev run-prod
-
-run-local: migrate runserver;
-
-run-local-docker:
-	USE_POSTGRES=1 $(MAKE) -s up migrate runserver
-
-run-dev: ENV=dev
-run-dev: up
-
-run-prod: ENV=prod
-run-prod: up
+# --------------------------------------------------------------------- #
