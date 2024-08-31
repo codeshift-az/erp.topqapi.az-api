@@ -33,11 +33,6 @@ help:
 	@echo " ------------------- Backup commands ---------------------"
 	@echo " backups              to show database backups"
 	@echo " backup               to backup database"
-	@echo " ------------------- Testing commands --------------------"
-	@echo " test                 to run tests"
-	@echo " test-cov             to run tests with coverage"
-	@echo " test-v               to run tests with verbose"
-	@echo " test-app             to run tests for app"
 	@echo " ------------------- Running commands --------------------"
 	@echo " run-local            to run app locally"
 	@echo " run-local-docker     to run app locally with docker"
@@ -85,27 +80,6 @@ createsuperuser:
 shell:
 	@echo "DJANGO: Running Django shell..."
 	$(RUN) shell
-
-# Testing commands
-.PHONY = test test-cov test-v
-
-app := core
-
-test:
-	@echo "TEST: Running tests..."
-	poetry run pytest -v
-
-test-cov:
-	@echo "TEST: Running tests with coverage..."
-	poetry run pytest --cov=server --cov-report=html
-
-test-v:
-	@echo "TEST: Running tests with verbose..."
-	poetry run pytest -svv
-
-test-app:
-	@echo "TEST: Running tests for app..."
-	poetry run pytest -v server/apps/$(app)
 
 # Docker commands
 .PHONY = docker-help build up down restart log

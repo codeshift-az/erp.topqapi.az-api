@@ -15,9 +15,6 @@ if USE_POSTGRES:
             "PASSWORD": config("POSTGRES_PASSWORD"),
             "HOST": config("POSTGRES_HOST"),
             "PORT": config("POSTGRES_PORT"),
-            "TEST": {
-                "NAME": "test_db",
-            },
         }
     }
 else:
@@ -25,9 +22,6 @@ else:
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
-            "TEST": {
-                "NAME": BASE_DIR / "test_db.sqlite3",
-            },
         }
     }
 
