@@ -1,23 +1,21 @@
-# Django API Project Template
+# TopQAPI ERP Project API
 
-## Description
-
-This is a template for a Django API project. It is intended to be used as a starting point for new projects.
+This project is a RESTful API for TopQAPI ERP Project.
 
 ## Getting Started
 
 ### Dependencies
 
-- [Python](https://www.python.org/downloads/) >= 3.10
-- [Poetry](https://python-poetry.org/docs/#installation) >= 1.7.1
-- [Docker](https://docs.docker.com/get-docker/) >= 24.0.7
+- [Python](https://www.python.org/downloads/) >= 3.12.5
+- [Poetry](https://python-poetry.org/docs/#installation) >= 1.8.3
+- [Docker](https://docs.docker.com/get-docker/) >= 27.1.1
 
 ### Installing
 
 1. Clone the repository
 
     ```bash
-    git clone https://github.com/tarlansoltanov/api.topqapi.az.git
+    git clone https://github.com/codeshift-az/erp.topqapi.az-api.git
     ```
 
 2. Install dependencies
