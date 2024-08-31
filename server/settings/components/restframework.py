@@ -1,9 +1,13 @@
-# Django REST Framework
-# https://www.django-rest-framework.org/
+"""
+Django REST Framework settings.
+
+For more information, see:
+https://www.django-rest-framework.org/
+"""
 
 import datetime
 
-from server.settings.components.common import INSTALLED_APPS
+from server.settings.components.default import INSTALLED_APPS
 
 INSTALLED_APPS += [
     "rest_framework",

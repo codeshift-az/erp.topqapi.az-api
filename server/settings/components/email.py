@@ -1,3 +1,7 @@
+"""
+Email settings.
+"""
+
 from server.settings.components import config
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

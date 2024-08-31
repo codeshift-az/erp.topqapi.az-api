@@ -1,32 +1,33 @@
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+"""
+Database settings.
 
-from server.settings.components import BASE_DIR, config
-from server.settings.components.common import INSTALLED_APPS
+For more information, see
+https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+"""
 
-USE_POSTGRES = config("USE_POSTGRES", cast=bool, default=False)
+from server.settings.components import config
+from server.settings.components.default import INSTALLED_APPS
 
-if USE_POSTGRES:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": config("POSTGRES_DB"),
-            "USER": config("POSTGRES_USER"),
-            "PASSWORD": config("POSTGRES_PASSWORD"),
-            "HOST": config("POSTGRES_HOST"),
-            "PORT": config("POSTGRES_PORT"),
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("POSTGRES_DB", cast=str, default=None),
+        "USER": config("POSTGRES_USER", cast=str, default=None),
+        "PASSWORD": config("POSTGRES_PASSWORD", cast=str, default=None),
+        "HOST": config("POSTGRES_HOST", cast=str, default="localhost"),
+        "PORT": config("POSTGRES_PORT", cast=str, default="5432"),
+        "TEST": {
+            "NAME": "test_db",
+        },
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-
+}
 
 # django-cleanup
 # https://github.com/un1t/django-cleanup
 
 INSTALLED_APPS += ["django_cleanup.apps.CleanupConfig"]
+
+# django-solo
+# https://github.com/lazybird/django-solo
+
+INSTALLED_APPS += ["solo"]

@@ -1,7 +1,8 @@
-# Custom Project Settings
+"""
+Project Related settings.
+"""
 
-from server.settings.components import BASE_DIR
-from server.settings.components.common import INSTALLED_APPS
+from server.settings.components.default import INSTALLED_APPS
 
 INSTALLED_APPS += [
     "server.apps.core",
@@ -19,13 +20,6 @@ INSTALLED_APPS += [
     "server.apps.order",
     "server.apps.payment",
 ]
-
-# Media files
-# https://docs.djangoproject.com/en/4.2/topics/files/
-
-MEDIA_URL = "/media/"
-
-MEDIA_ROOT = BASE_DIR / "media"
 
 # Custom user model
 

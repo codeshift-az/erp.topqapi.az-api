@@ -1,5 +1,9 @@
-# Logging
-# https://docs.djangoproject.com/en/5.0/ref/settings/#logging
+"""
+Logging settings.
+
+For more information, see
+https://docs.djangoproject.com/en/5.1/ref/settings/#logging
+"""
 
 from server.settings.components import BASE_DIR
 
@@ -38,6 +42,11 @@ LOGGING = {
         },
         "server": {
             "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "backup": {
+            "handlers": ["file"],
             "level": "INFO",
             "propagate": True,
         },

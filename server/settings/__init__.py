@@ -1,5 +1,5 @@
 """
-Django Project - Settings Module.
+Split Settings Module.
 
 This module is responsible for loading the all component setting files and
 correct settings file based on the environment variable DJANGO_ENV.
@@ -14,17 +14,19 @@ from split_settings.tools import include
 
 from server.settings.components import config
 
-ENV = config("DJANGO_ENV", default="local") or "local"
+ENV = config("DJANGO_ENV", default="local", cast=str) or "local"
 
 base_settings = (
-    "components/common.py",  # Standard Django Settings.
-    "components/database.py",  # Database configuration.
-    "components/mailer.py",  # Email configuration.
-    "components/logging.py",  # Logging configuration.
-    "components/healthcheck.py",  # Health checks.
-    "components/cors.py",  # CORS configuration.
-    "components/restframework.py",  # Django REST Framework.
-    "components/custom.py",  # Custom Project Settings.
+    "components/default.py",  # Default Django Settings.
+    "components/files.py",  # File related settings.
+    "components/i18n.py",  # Internationalization settings.
+    "components/logging.py",  # Logging settings.
+    "components/database.py",  # Database settings.
+    "components/health.py",  # Health Check settings.
+    "components/corsheaders.py",  # Django CORS Headers settings.
+    "components/email.py",  # Email settings.
+    "components/restframework.py",  # Django REST Framework settings.
+    "components/project.py",  # Project Related settings.
     f"environments/{ENV}.py",  # Environment settings.
 )
 
