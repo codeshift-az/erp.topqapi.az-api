@@ -23,6 +23,8 @@ RUN set -xe \
   libpq-dev \
   # For postgres backups
   postgresql-client \
+  # For crontab
+  cron \
   # Translations dependencies
   gettext \
   # Required for poetry

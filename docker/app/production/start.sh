@@ -17,9 +17,20 @@ fi
 
 export DJANGO_ENV
 
-# Run python specific scripts:
+# Collect static files
+echo "Collecting static files..."
 python manage.py collectstatic --noinput
+
+# Copy all environment variables for cron
+printenv | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID|LANG|PWD|GPG_KEY|_=' >> /etc/environment
+
+# Start cron
+service cron start
+
+# Add cron job
+echo "Adding cron jobs..."
+python manage.py crontab add
 
 # Start gunicorn
 echo "Starting gunicorn..."
-gunicorn --config python:docker.app.gunicorn.config server.wsgi
+gunicorn --config python:docker.app.production.config server.wsgi

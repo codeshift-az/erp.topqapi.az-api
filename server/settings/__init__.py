@@ -22,6 +22,7 @@ base_settings = (
     "components/i18n.py",  # Internationalization settings.
     "components/logging.py",  # Logging settings.
     "components/database.py",  # Database settings.
+    "components/backup.py",  # Backup settings.
     "components/health.py",  # Health Check settings.
     "components/corsheaders.py",  # Django CORS Headers settings.
     "components/email.py",  # Email settings.
