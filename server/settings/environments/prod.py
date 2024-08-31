@@ -1,32 +1,32 @@
-"""Production environment settings."""
+"""
+Production environment settings.
+"""
 
-from server.settings.components import BASE_DIR, config
+from server.settings.components import config
 
-SECRET_KEY = config("DJANGO_SECRET_KEY")
+SECRET_KEY = config("DJANGO_SECRET_KEY", cast=str)
 
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    config("DOMAIN_NAME"),
-    config("DOMAIN_IP"),
+    f'*.{config("DOMAIN_NAME", cast=str)}',
+    config("DOMAIN_NAME", cast=str),
     # We need this value for `healthcheck` to work:
     "localhost",
 ]
 
-IN_DOCKER = config("IN_DOCKER", cast=bool, default=False)
-
 # Staticfiles
-# https://docs.djangoproject.com/en/5.0/ref/contrib/staticfiles/
+# https://docs.djangoproject.com/en/5.1/ref/contrib/staticfiles/
 
-STATIC_ROOT = "/var/www/static" if IN_DOCKER else BASE_DIR / "staticfiles"
+STATIC_ROOT = "/var/www/static"
 
 # Media files
-# https://docs.djangoproject.com/en/5.0/topics/files/
+# https://docs.djangoproject.com/en/5.1/topics/files/
 
-MEDIA_ROOT = "/var/www/media" if IN_DOCKER else BASE_DIR / "media"
+MEDIA_ROOT = "/var/www/media"
 
 # Security
-# https://docs.djangoproject.com/en/5.0/topics/security/
+# https://docs.djangoproject.com/en/5.1/topics/security/
 
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True

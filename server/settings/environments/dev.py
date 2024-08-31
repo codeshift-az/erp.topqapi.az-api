@@ -1,19 +1,20 @@
-"""Development environment settings."""
+"""
+Development environment settings.
+"""
 
 import socket
 
 from server.settings.components import config
-from server.settings.components.common import INSTALLED_APPS, MIDDLEWARE
+from server.settings.components.default import INSTALLED_APPS, MIDDLEWARE
 from server.settings.components.logging import LOGGING
 
-SECRET_KEY = config("DJANGO_SECRET_KEY")
+SECRET_KEY = config("DJANGO_SECRET_KEY", cast=str, default="django-insecure-abcdefghijklmnopqrstuvwxyz1234567890")
 
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    f"*.{config('DOMAIN_NAME', cast=str)}",
+    f'*.{config("DOMAIN_NAME", cast=str)}',
     config("DOMAIN_NAME", cast=str),
-    config("DOMAIN_IP", cast=str),
     "localhost",
     "127.0.0.1",
     "[::1]",
@@ -28,6 +29,14 @@ MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
+DEBUG_TOOLBAR_CONFIG = {
+    "DISABLE_PANELS": [
+        "debug_toolbar.panels.profiling.ProfilingPanel",
+        "debug_toolbar.panels.redirects.RedirectsPanel",
+    ],
+    "SHOW_TEMPLATE_CONTEXT": True,
+}
 
 # Logging
 

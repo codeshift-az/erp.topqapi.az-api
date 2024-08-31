@@ -1,6 +1,8 @@
-"""Local environment settings."""
+"""
+Local environment settings.
+"""
 
-SECRET_KEY = "django-insecure-o01^poa!yn4d$ujzy00c#3j=bp!=0zyp-=$uvc_b!h-$tr3=6&"
+SECRET_KEY = "django-insecure-h)ake1u2n=p9k=wg-q*965fvao3#-_nt5=ipvdvjapy^s$gte9"
 
 DEBUG = True
 

@@ -1,15 +1,45 @@
 services:
+  app:
+    image: ${PROJECT_NAME}
+    container_name: ${PROJECT_NAME}_app
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    restart: unless-stopped
+    command: python -Wd manage.py runserver 0.0.0.0:${DJANGO_PORT}
+    ports:
+      - ${DJANGO_PORT}:${DJANGO_PORT}
+    volumes:
+      - .:/app:rw
+    env_file:
+      - ./config/.env
+    environment:
+      - POSTGRES_HOST=db
+    depends_on:
+      - db
+    networks:
+      - webdata
+    healthcheck:
+      test: |
+        /usr/bin/test $$(
+          /usr/bin/curl --fail http://localhost:${DJANGO_PORT}/health/?format=json
+          --write-out "%{http_code}" --silent --output /dev/null
+        ) -eq 200
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   db:
-    <<: &db
-      image: postgres:14.2-alpine
-      container_name: ${PROJECT_NAME}_db
-      restart: unless-stopped
-      volumes:
-        - pgdata:/var/lib/postgresql/data/
-      env_file:
-        - ./config/.env
-      networks:
-        - webdata
+    image: postgres:14.2-alpine
+    container_name: ${PROJECT_NAME}_db
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    env_file:
+      - ./config/.env
+    networks:
+      - webdata
 
 volumes:
   pgdata:
