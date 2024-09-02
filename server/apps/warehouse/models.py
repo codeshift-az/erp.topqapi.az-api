@@ -28,7 +28,7 @@ class WarehouseItem(TimeStampedModel):
     entry = models.ForeignKey(WarehouseEntry, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="warehouse_items")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    quantity = models.PositiveIntegerField(default=0)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     objects = WarehouseItemQuerySet.as_manager()
 
@@ -49,7 +49,7 @@ class WarehouseCartItem(TimeStampedModel):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="warehouse_cart")
     product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="warehouse_cart")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    quantity = models.PositiveIntegerField(default=0)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     class Meta:
         verbose_name = "Cart Item"

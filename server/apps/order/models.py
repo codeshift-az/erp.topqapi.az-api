@@ -89,7 +89,7 @@ class OrderItem(TimeStampedModel):
     product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="order_products")
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="order_products")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    quantity = models.PositiveSmallIntegerField(default=0)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     size = models.CharField(max_length=20, blank=True)
 
     is_factory_ready = models.BooleanField(default=False)
@@ -114,7 +114,7 @@ class OrderCartItem(TimeStampedModel):
     product = models.ForeignKey("product.Product", on_delete=models.CASCADE, related_name="order_cart")
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="order_cart")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    quantity = models.PositiveIntegerField(default=0)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     size = models.CharField(max_length=20, blank=True)
 
     class Meta:
@@ -133,7 +133,7 @@ class OrderItemSale(TimeStampedModel):
 
     order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name="sales")
     warehouse_item = models.ForeignKey("warehouse.WarehouseItem", on_delete=models.CASCADE, related_name="sales")
-    quantity = models.PositiveSmallIntegerField(default=0)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     class Meta:
         verbose_name = "Order Item Sale"

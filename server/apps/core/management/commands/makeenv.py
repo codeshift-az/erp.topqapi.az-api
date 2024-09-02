@@ -58,6 +58,8 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.WARNING("Aborted!"))
                 return False
 
+        return True
+
     def create_env_file(self) -> None:
         example_file = self.options.get("example") or self.example_file
         env_file = self.options.get("env") or self.env_file
@@ -81,7 +83,7 @@ class Command(BaseCommand):
 
     def get_variable(self, key: str, default: str) -> str:
         """Get a variable from the user with validation"""
-        if "SECRET_KEY" in key:
+        if "DJANGO_SECRET_KEY" in key:
             return self.get_random_secret_key()
 
         if "PASSWORD" in key:

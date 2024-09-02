@@ -21,6 +21,7 @@ help:
 	@echo " run-prod									  to run Django server in production mode"
 	@echo " logs											  to show Docker logs"
 	@echo " shell										    to run shell in Django Docker container"
+	@echo " backup											to backup Django database and media files"
 	@echo " ------------------------- Django commands --------------------------- "
 	@echo " django-runserver            to run Django server"
 	@echo " django-migrate              to run Django migrations"
@@ -80,6 +81,9 @@ logs: docker-logs
 shell: svc=app
 shell: shell=bash
 shell: docker-shell
+
+.PHONY: backup
+backup: django-backup
 
 # ------------------------- Django commands --------------------------- #
 
