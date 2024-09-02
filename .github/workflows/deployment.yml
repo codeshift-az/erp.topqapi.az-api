@@ -2,12 +2,12 @@ name: Deployment
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-        
+
     steps:
       - uses: actions/checkout@v4.1.7
       - name: Deployment
@@ -16,4 +16,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          script: cd ~/webapi && git checkout . && git pull --rebase && make ENV=prod backup && make ENV=prod docker-down && make ENV=prod docker-build && make run-prod
+          script: cd ~/webapi && git checkout . && git pull --rebase && make ENV=prod backup && make ENV=prod docker-down && make ENV=prod docker-build && make run-production

@@ -19,6 +19,7 @@ help:
 	@echo " run-local									  to run Django server locally"
 	@echo " run-dev										  to run Django server in development mode"
 	@echo " run-prod									  to run Django server in production mode"
+	@echo " run-production						  to run Django server in production mode (without logs)"
 	@echo " logs											  to show Docker logs"
 	@echo " shell										    to run shell in Django Docker container"
 	@echo " backup											to backup Django database and media files"
@@ -73,6 +74,10 @@ run-dev: docker-up docker-logs
 .PHONY: run-prod
 run-prod: ENV=prod
 run-prod: docker-up docker-logs
+
+.PHONY:
+run-production: ENV=prod
+run-production: docker-up
 
 .PHONY: logs
 logs: docker-logs
