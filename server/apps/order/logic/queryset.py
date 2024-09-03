@@ -1,5 +1,7 @@
 from django.db import models
 
+from server.apps.order.logic.constants import OrderStatus
+
 
 class OrderItemQuerySet(models.QuerySet):
     """QuerySet definition for OrderItem model."""
@@ -19,11 +21,17 @@ class OrderItemQuerySet(models.QuerySet):
     def get_profit(self):
         """Get Profit of the item."""
         return self.annotate(
-            profit=models.ExpressionWrapper(
-                models.F("price") * models.F("quantity")
-                - models.Sum(models.F("sales__warehouse_item__price") * models.F("quantity")),
+            profit=models.Case(
+                models.When(
+                    order__status__gte=OrderStatus.READY,
+                    then=models.ExpressionWrapper(
+                        models.F("price") * models.F("quantity")
+                        - models.Sum(models.F("sales__warehouse_item__price") * models.F("quantity")),
+                        output_field=models.DecimalField(),
+                    ),
+                ),
                 output_field=models.DecimalField(),
-            )
+            ),
         )
 
     def get_stats(self):
@@ -78,15 +86,25 @@ class OrderQuerySet(models.QuerySet):
     def get_profit(self):
         """Get Profit of the order."""
         return self.get_related_sum().annotate(
-            profit=models.ExpressionWrapper(
-                models.F("total_price")
-                - models.F("total_warehouse_price")
-                - models.F("total_expense")
-                - models.F("discount")
-                - models.F("seller_share")
-                - models.F("delivery_price")
-                - models.F("install_price"),
-                output_field=models.DecimalField(),
+            profit=(
+                models.ExpressionWrapper(
+                    models.Case(
+                        models.When(
+                            status__gte=OrderStatus.READY,
+                            then=models.ExpressionWrapper(
+                                models.F("total_price")
+                                - models.F("total_warehouse_price")
+                                - models.F("total_expense")
+                                - models.F("discount")
+                                - models.F("seller_share")
+                                - models.F("delivery_price")
+                                - models.F("install_price"),
+                                output_field=models.DecimalField(),
+                            ),
+                        ),
+                    ),
+                    output_field=models.DecimalField(),
+                )
             )
         )
 
