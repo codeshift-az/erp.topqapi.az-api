@@ -1,3 +1,4 @@
+from django.db import models
 from django_filters import rest_framework as filters
 
 from server.apps.staff.models import Driver, Seller, Worker
@@ -35,10 +36,22 @@ class WorkerFilter(filters.FilterSet):
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
     date = filters.DateFilter(method="filter_by_date")
 
+    order_id = filters.NumberFilter(method="filter_by_order_id")
+
     class Meta:
         model = Worker
         fields = ("name",)
 
     def filter_by_date(self, queryset, name, value):
         """Filter queryset by which does not have any order that day"""
+
+        order_id = self.request.query_params.get("order_id")
+
+        if order_id:
+            return queryset.exclude(models.Q(orders__install_date=value) & ~models.Q(orders__id=order_id))
+
         return queryset.exclude(orders__install_date=value)
+
+    def filter_by_order_id(self, queryset, name, value):
+        """Filter queryset by order_id"""
+        return queryset
