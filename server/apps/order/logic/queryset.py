@@ -122,4 +122,5 @@ class OrderQuerySet(models.QuerySet):
             total_orders=models.Count("id"),
             total_amount=models.Sum(models.F("total_price"), output_field=models.DecimalField()),
             total_profit=models.Sum(models.F("profit"), output_field=models.DecimalField(), default=0),
+            total_payed=models.Sum(models.F("payed"), output_field=models.DecimalField(), default=0),
         )

@@ -62,6 +62,10 @@ class OrderViewSet(viewsets.ModelViewSet):
                         "type": "number",
                         "description": "Total profit of all orders.",
                     },
+                    "total_payed": {
+                        "type": "number",
+                        "description": "Total payed amount of all orders.",
+                    },
                 },
             ),
             status.HTTP_401_UNAUTHORIZED: responses.UNAUTHORIZED,
