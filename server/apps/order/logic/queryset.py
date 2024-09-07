@@ -66,7 +66,6 @@ class OrderQuerySet(models.QuerySet):
             total_price=models.Sum(
                 models.F("items__price") * models.F("items__quantity"),
                 output_field=models.DecimalField(),
-                distinct=True,
                 default=0.00,
             ),
             total_warehouse_price=models.Sum(
@@ -95,7 +94,6 @@ class OrderQuerySet(models.QuerySet):
                                 models.F("total_price")
                                 - models.F("total_warehouse_price")
                                 - models.F("total_expense")
-                                - models.F("discount")
                                 - models.F("seller_share")
                                 - models.F("delivery_price")
                                 - models.F("install_price"),

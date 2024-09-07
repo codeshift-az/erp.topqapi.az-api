@@ -6,6 +6,8 @@ from server.apps.order.models import Order, OrderItem
 class OrderItemFilter(filters.FilterSet):
     """FilterSet class for OrderItem model."""
 
+    id = filters.NumberFilter(field_name="id", lookup_expr="exact")
+
     product = filters.CharFilter(field_name="product__name", lookup_expr="icontains")
     supplier = filters.CharFilter(field_name="supplier__name", lookup_expr="icontains")
     category = filters.CharFilter(field_name="product__category__name", lookup_expr="icontains")
@@ -19,6 +21,7 @@ class OrderItemFilter(filters.FilterSet):
     class Meta:
         model = OrderItem
         fields = (
+            "id",
             "product",
             "supplier",
             "category",

@@ -6,6 +6,7 @@ from server.apps.supplier.models import Supplier
 class SupplierFilter(filters.FilterSet):
     """FilterSet class for Supplier model."""
 
+    id = filters.NumberFilter(field_name="id", lookup_expr="exact")
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
     product = filters.NumberFilter(method="filter_by_product")
 

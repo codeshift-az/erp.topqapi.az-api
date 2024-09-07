@@ -6,6 +6,7 @@ from server.apps.expense.models import Expense
 class ExpenseFilter(filters.FilterSet):
     """FilterSet class for Expense model."""
 
+    id = filters.NumberFilter(field_name="id", lookup_expr="exact")
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
 
     branch = filters.CharFilter(field_name="branch__name", lookup_expr="icontains")
@@ -18,6 +19,7 @@ class ExpenseFilter(filters.FilterSet):
     class Meta:
         model = Expense
         fields = (
+            "id",
             "name",
             "branch",
             "date_start",

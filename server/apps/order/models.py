@@ -18,7 +18,6 @@ class Order(TimeStampedModel):
 
     note = models.TextField(blank=True)
 
-    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     payed = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     sale_date = models.DateField()
@@ -78,8 +77,6 @@ class OrderItem(TimeStampedModel):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     size = models.CharField(max_length=20, blank=True)
-
-    is_factory_ready = models.BooleanField(default=False)
 
     objects = OrderItemQuerySet.as_manager()
 

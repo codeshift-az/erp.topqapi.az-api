@@ -75,7 +75,6 @@ class OrderAdmin(admin.ModelAdmin):
         "phone",
         "address",
         "note",
-        "discount",
         "payed",
         "seller_share",
         "sale_date",
