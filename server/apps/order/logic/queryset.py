@@ -62,18 +62,28 @@ class OrderQuerySet(models.QuerySet):
 
     def get_related_sum(self):
         """Get Sum of the related items."""
+
+        from server.apps.order.models import OrderItem  # noqa
+
+        total_price_sub = models.Subquery(
+            OrderItem.objects.values("order")
+            .annotate(total_price=models.Sum(models.F("price") * models.F("quantity")))
+            .filter(order=models.OuterRef("pk"))
+            .values("total_price")
+        )
+
+        total_warehouse_price_sub = models.Subquery(
+            OrderItem.objects.values("order")
+            .annotate(
+                total_warehouse_price=models.Sum(models.F("sales__warehouse_item__price") * models.F("quantity"))
+            )
+            .filter(order=models.OuterRef("pk"))
+            .values("total_warehouse_price")
+        )
+
         return self.get_related().annotate(
-            total_price=models.Sum(
-                models.F("items__price") * models.F("items__quantity"),
-                output_field=models.DecimalField(),
-                default=0.00,
-            ),
-            total_warehouse_price=models.Sum(
-                models.F("items__sales__warehouse_item__price") * models.F("items__quantity"),
-                output_field=models.DecimalField(),
-                distinct=True,
-                default=0.00,
-            ),
+            total_price=total_price_sub,
+            total_warehouse_price=total_warehouse_price_sub,
             total_expense=models.Sum(
                 models.F("expenses__price"),
                 output_field=models.DecimalField(),
