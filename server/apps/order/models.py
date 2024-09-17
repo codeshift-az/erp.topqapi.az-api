@@ -76,7 +76,7 @@ class OrderItem(TimeStampedModel):
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="order_products")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    size = models.CharField(max_length=20, blank=True)
+    size = models.CharField(max_length=255, blank=True)
 
     objects = OrderItemQuerySet.as_manager()
 
@@ -99,7 +99,7 @@ class OrderCartItem(TimeStampedModel):
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="order_cart")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    size = models.CharField(max_length=20, blank=True)
+    size = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "Order Cart Item"
