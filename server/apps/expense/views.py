@@ -1,5 +1,5 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework import status, viewsets
+from rest_framework import permissions, status, viewsets
 
 # Core
 from server.apps.core.logic import responses
@@ -15,6 +15,8 @@ class ExpenseViewSet(viewsets.ModelViewSet):
 
     queryset = Expense.objects.all()
     serializer_class = ExpenseSerializer
+
+    permission_classes = [permissions.IsAuthenticated]
 
     filterset_class = ExpenseFilter
     search_fields = ("name",)
