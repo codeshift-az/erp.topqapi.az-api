@@ -67,17 +67,19 @@ class OrderQuerySet(models.QuerySet):
 
         total_price_sub = models.Subquery(
             OrderItem.objects.values("order")
-            .annotate(total_price=models.Sum(models.F("price") * models.F("quantity")))
             .filter(order=models.OuterRef("pk"))
+            .annotate(total_price=models.Sum(models.F("price") * models.F("quantity")))
             .values("total_price")
         )
 
         total_warehouse_price_sub = models.Subquery(
             OrderItem.objects.values("order")
-            .annotate(
-                total_warehouse_price=models.Sum(models.F("sales__warehouse_item__price") * models.F("quantity"))
-            )
             .filter(order=models.OuterRef("pk"))
+            .annotate(
+                total_warehouse_price=models.Sum(
+                    models.F("sales__warehouse_item__price") * models.F("sales__quantity")
+                )
+            )
             .values("total_warehouse_price")
         )
 

@@ -59,6 +59,8 @@ class OrderFilter(filters.FilterSet):
     install_date_start = filters.DateFilter(field_name="install_date", lookup_expr="gte")
     install_date_end = filters.DateFilter(field_name="install_date", lookup_expr="lte")
 
+    status = filters.CharFilter(field_name="status", lookup_expr="exact")
+
     class Meta:
         model = Order
         fields = (
