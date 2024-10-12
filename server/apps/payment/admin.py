@@ -11,6 +11,7 @@ class PaymentAdmin(admin.ModelAdmin):
         "supplier",
         "amount",
         "date",
+        "note",
         "updated_at",
         "created_at",
     )

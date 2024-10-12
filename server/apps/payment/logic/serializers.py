@@ -16,6 +16,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             "supplier",
             "amount",
             "date",
+            "note",
             "updated_at",
             "created_at",
         )

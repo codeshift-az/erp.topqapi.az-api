@@ -9,6 +9,7 @@ class Payment(TimeStampedModel):
     supplier = models.ForeignKey("supplier.Supplier", on_delete=models.CASCADE, related_name="payments")
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     date = models.DateField()
+    note = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Payment"
